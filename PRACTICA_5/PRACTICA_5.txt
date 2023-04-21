@@ -1,0 +1,71 @@
+float Do = 261.626;
+float DoSos = 277.163;
+float Re = 293.665;
+float ReSos = 311.127;
+float Mi = 329.628;
+float Fa = 349.228;
+float FaSos = 369.994;
+float Sol = 391.995;
+float SolSos = 415.305;
+float La = 440;
+float LaSos = 446.164;
+float Si = 494.883;
+#define echo 11
+#define trigger 9
+#define octup 5
+#define octdown6
+#define buzz 2
+int tiempo;
+long d;
+void setup()    
+{    
+  Serial.begin(9600);
+  pinMode(buzz, OUTPUT);
+  pinMode(trigger, OUTPUT);
+  pinMode(echo, INPUT);
+}
+void loop() {
+  Serial.println(d);
+  medicion();
+  notas();
+}
+int medicion(){
+  long t; 
+  digitalWrite(trigger, HIGH);
+  delayMicroseconds(10); 
+  digitalWrite(trigger, LOW);
+  t = pulseIn(echo, HIGH);
+  d = t/59; 
+  delay(600);
+  return d;
+}
+  void notas(){
+  int tono = d;
+  switch (tono){
+    case 4:
+    tone(buzz, Do, 200);
+    case 6:
+    tone(buzz, DoSos, 200);
+    case 8:
+    tone(buzz, Re, 200);
+    case 10:
+    tone(buzz, ReSos, 200);
+    case 12:
+    tone(buzz, Mi, 200);
+    case 14:
+    tone(buzz, Fa, 200);
+    case 5:
+    tone(buzz, FaSos, 200);
+    case 16:
+    tone(buzz, Sol, 200);
+    case 18:
+    tone(buzz, SolSos, 200);
+    case 20:
+    tone(buzz, La, 200);
+    case 22:
+    tone(buzz, LaSos, 200);
+    case 24:
+    tone(buzz, Si, 200);
+    }
+  }
+  
