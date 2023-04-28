@@ -24,6 +24,7 @@
 #define echo 15
 #define alarma 13
 int d;
+int distancia;
 //Constructor
 LiquidCrystal_I2C PANTALLA_ESTRADA(direccion_lcd, columnas, filas);
 
@@ -57,6 +58,7 @@ void loop()
 {
   Serial.println(d);
   medicion();
+   distancia = d;
   alerta();
 }
 int medicion(){
@@ -70,7 +72,7 @@ int medicion(){
   return d;
 }
 void alerta(){
-   if( d == 50){
+   if( distancia == 50){
     
     PANTALLA_ESTRADA.setCursor(0,0);
     PANTALLA_ESTRADA.print("                ");
@@ -87,7 +89,7 @@ void alerta(){
     PANTALLA_ESTRADA.setCursor(0,1);
     PANTALLA_ESTRADA.print("     LIBRE      ");
   }
-  if( d == 30){
+  if( distancia == 30){
     PANTALLA_ESTRADA.setCursor(0,0);
     PANTALLA_ESTRADA.print("                ");
     PANTALLA_ESTRADA.setCursor(0,0);
@@ -107,7 +109,7 @@ void alerta(){
     PANTALLA_ESTRADA.setCursor(0,1);
     PANTALLA_ESTRADA.print("     CUIDADO    ");
   }
-  if( d == 10){
+  if( distancia == 10){
     PANTALLA_ESTRADA.setCursor(0,0);
     PANTALLA_ESTRADA.print("                ");
     PANTALLA_ESTRADA.setCursor(0,0);
