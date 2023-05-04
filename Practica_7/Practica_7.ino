@@ -26,6 +26,9 @@
 #define RadarPin 16
 #define pin_Servo 5
 #define buzzer 13
+#define R 10
+#define G 11
+#define B 12
 int personacerca =0;
 int value;
 int estado1 = 0;
@@ -144,6 +147,9 @@ void setup() {
   pinMode(btn2, INPUT);
   pinMode(btn3, INPUT);
   Serial.begin(9600);
+  pinMode(R, OUTPUT);
+  pinMode(G, OUTPUT);
+  pinMode(B, OUTPUT);
 sensor.begin(); 
 LCD_ESTRADA.init(); 
 LCD_ESTRADA.backlight(); 
@@ -181,6 +187,9 @@ puerta();
 proximidad();
 luminarias();
 puerta();
+condicion_temp();
+luminarias();
+puerta();
 }
 
 float medicion(){
@@ -199,10 +208,10 @@ void proximidad(){
      for(int i = 0; i < 7; i++){
       rueda.setPixelColor(i,rueda.Color(0,255,0));
           rueda.show();
-          delay(1);
-          rueda.setPixelColor(i,rueda.Color(0,50,0));
+          delay(50);
+          rueda.setPixelColor(i,rueda.Color(0,40,10));
           rueda.show();
-          delay(1);
+          delay(50);
       }
     }   
   if(value == HIGH){
@@ -212,10 +221,10 @@ void proximidad(){
     for(int i = 0; i < 7; i++){
       rueda.setPixelColor(i,rueda.Color(255,0,0));
           rueda.show();
-          delay(1);
-          rueda.setPixelColor(i,rueda.Color(50,0,0));
+          delay(50);
+          rueda.setPixelColor(i,rueda.Color(40,10,0));
           rueda.show();
-          delay(1); 
+          delay(50); 
     }
     digitalWrite(buzzer, LOW);
     }if(personacerca == 0){
@@ -294,4 +303,21 @@ void puerta(){
   } else{
     Servo_Estrada.write(0);
     }
+}
+void condicion_temp(){
+if(temperatura > 15 && temperatura <= 21){
+  digitalWrite(R, HIGH);
+  digitalWrite(G, LOW);
+  digitalWrite(B, HIGH);
+}
+if(temperatura > 21 && temperatura <= 25){
+  digitalWrite(R, LOW);
+  digitalWrite(G, HIGH);
+  digitalWrite(B, LOW);
+}
+if(temperatura > 25 && temperatura < 45){
+  digitalWrite(R, HIGH);
+  digitalWrite(G, LOW);
+  digitalWrite(B, LOW);
+}
 }
