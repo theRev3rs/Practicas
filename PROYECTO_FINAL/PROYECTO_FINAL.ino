@@ -49,11 +49,12 @@ Servo Servo_Estrada;
 
 //Variables
 float d;
-int silo;
-int  capacidad;
+byte  capacidad;
+
 //Funciones
 float medicion();
 int lectura_teclado();
+void envio_arduino_secundario();
 
 void setup() {
   Serial.begin(9600); // Inicia comunicación con la consola
@@ -62,40 +63,46 @@ void setup() {
   pinMode(echo, INPUT); // Configuramos los pines del Ultrasonico
   PANTALLA_ESTRADA.init(); //Iniciamos el LCD
   PANTALLA_ESTRADA.backlight();  //Encendemos la luz del LCD
-  PANTALLA_ESTRADA.setCursor(0,0); //Colocamos el cursor en la posicion (0,0)
-  PANTALLA_ESTRADA.print("Almacenado");  //Imprimimos la palabra "Caracter"
   Servo_Estrada.attach(pin_Servo); // Inicia el Servo
   Servo_Estrada.write(0);
 }
 
 void loop() {
-   int descargo = lectura_teclado(); // Lee el telcado Matricial
-   capacidad = (medicion()/50)*100; // Mide el contenedor
-   int contenido = silo - descargo; 
-   PANTALLA_ESTRADA.setCursor(12,0);  // Imprime la interfaz
-   PANTALLA_ESTRADA.print(capacidad); //Porcentaje de granos dentro
-   PANTALLA_ESTRADA.print(" % ");
-   envio_arduino_secundario();
+   lectura_teclado(); // Lee el telcado Matricial
+   capacidad = 110 - medicion(); // Mide el contenedor
+   envio_arduino_secundario(); // Envio de datos al Arduino secundario
+   if (capacidad <= 100){
+    PANTALLA_ESTRADA.setCursor(0,0); //Colocamos el cursor en la posicion (0,0)
+     PANTALLA_ESTRADA.print("Almacenado:");  //Imprimimos la palabra "Caracter"
+   PANTALLA_ESTRADA.setCursor(11,0);  // Imprime la interfaz
+   PANTALLA_ESTRADA.print(capacidad);
+   Serial.println(capacidad);//Porcentaje de granos dentro
+   PANTALLA_ESTRADA.print("%  ");
+   PANTALLA_ESTRADA.setCursor(0,1);
+PANTALLA_ESTRADA.print("Desea servir?   ");
+   }
+   else {
+    PANTALLA_ESTRADA.setCursor(0,0);
+    PANTALLA_ESTRADA.print(" Cierre la Tapa ");
+    PANTALLA_ESTRADA.setCursor(0,1);
+    PANTALLA_ESTRADA.print("                ");
+   }
 }
 float medicion(){
-  /*
   long t; 
   digitalWrite(trig, HIGH);
   delayMicroseconds(10); 
   digitalWrite(trig, LOW);
   t = pulseIn(echo, HIGH);
   d = t/59;
-  delay(100);
-  Serial.println(d);
-  return d;
-  */
-  int porcentaje = 12;
+  delay(500);
+  int porcentaje = (d/30)*100;
+  
   return porcentaje;
 }
 int lectura_teclado(){
   char tecla = teclado_estrada.getKey();
-  PANTALLA_ESTRADA.setCursor(0,1);
-PANTALLA_ESTRADA.print("Desea servir?   ");
+  
   if(tecla){
 switch(tecla){
   
@@ -108,6 +115,7 @@ switch(tecla){
       delay(2000);
       Servo_Estrada.write(0);
       delay(500);
+      envio_arduino_secundario(); // Envio de datos al Arduino secundario
       break;
    } else{    // En caso de que no sea suficiente para completar la solicitud
     for(int i = 0; i < 5; i++){
@@ -124,12 +132,13 @@ switch(tecla){
   case '2': // Segunda unidad de tamizaje
    if(capacidad >= 10){ // Ejemplo del porcentaje minimo para completar la solicitud
    PANTALLA_ESTRADA.setCursor(0,1);
-   PANTALLA_ESTRADA.print("Sirviendo: 2.5 lb ");
+   PANTALLA_ESTRADA.print("Sirviendo: 2.5lb ");
       Serial.println(capacidad);
       Servo_Estrada.write(90);
       delay(5000);
       Servo_Estrada.write(0);
       delay(500);
+      envio_arduino_secundario(); // Envio de datos al Arduino secundario
       break;
    } else{    // En caso de que no sea suficiente para completar la solicitud
     for(int i = 0; i < 5; i++){
@@ -152,6 +161,7 @@ switch(tecla){
       delay(10000);
       Servo_Estrada.write(0);
       delay(500);
+      envio_arduino_secundario(); // Envio de datos al Arduino secundario
       break;
    } else{    // En caso de que no sea suficiente para completar la solicitud
     for(int i = 0; i < 5; i++){
@@ -174,6 +184,7 @@ switch(tecla){
       delay(15000);
       Servo_Estrada.write(0);
       delay(500);
+      envio_arduino_secundario(); // Envio de datos al Arduino secundario
       break;
    } else{    // En caso de que no sea suficiente para completar la solicitud
     for(int i = 0; i < 5; i++){
@@ -195,6 +206,7 @@ switch(tecla){
       delay(20000);
       Servo_Estrada.write(0);
       delay(500);
+      envio_arduino_secundario(); // Envio de datos al Arduino secundario
       break;
    } else{    // En caso de que no sea suficiente para completar la solicitud
     for(int i = 0; i < 5; i++){
@@ -208,7 +220,7 @@ switch(tecla){
     break;
   }
 
-  case '6': // Quinta unidad de tamizaje
+  case '6': // Sexta unidad de tamizaje
    if(capacidad >= 45){ // Ejemplo del porcentaje minimo para completar la solicitud
    PANTALLA_ESTRADA.setCursor(0,1);
    PANTALLA_ESTRADA.print("Sirviendo: 16 lb ");
@@ -217,6 +229,7 @@ switch(tecla){
       delay(30000);
       Servo_Estrada.write(0);
       delay(500);
+      envio_arduino_secundario(); // Envio de datos al Arduino secundario
       break;
    } else{    // En caso de que no sea suficiente para completar la solicitud
     for(int i = 0; i < 5; i++){
@@ -229,74 +242,135 @@ switch(tecla){
     }
     break;
   }
+  case '7': // boton invalido
+   PANTALLA_ESTRADA.setCursor(0,1);
+   PANTALLA_ESTRADA.print("Entrada Invalida");
+   delay(900);
+    break;
+    case '8': // boton invalido
+   PANTALLA_ESTRADA.setCursor(0,1);
+   PANTALLA_ESTRADA.print("Entrada Invalida");
+   delay(900);
+    break;
+    case '9': // boton invalido
+   PANTALLA_ESTRADA.setCursor(0,1);
+   PANTALLA_ESTRADA.print("Entrada Invalida");
+   delay(900);
+    break;
+    case '0': // boton invalido
+   PANTALLA_ESTRADA.setCursor(0,1);
+   PANTALLA_ESTRADA.print("Entrada Invalida");
+   delay(900);
+    break;
+    case 'A': // boton invalido
+   PANTALLA_ESTRADA.setCursor(0,1);
+   PANTALLA_ESTRADA.print("Entrada Invalida");
+   delay(900);
+    break;
+    case 'B': // boton invalido
+   PANTALLA_ESTRADA.setCursor(0,1);
+   PANTALLA_ESTRADA.print("Entrada Invalida");
+   delay(900);
+    break;
+    case 'C': // boton invalido
+   PANTALLA_ESTRADA.setCursor(0,1);
+   PANTALLA_ESTRADA.print("Entrada Invalida");
+   delay(900);
+    break;
+    case 'D': // boton invalido
+   PANTALLA_ESTRADA.setCursor(0,1);
+   PANTALLA_ESTRADA.print("Entrada Invalida");
+   delay(900);
+    break;
+    case '*': // boton invalido
+   PANTALLA_ESTRADA.setCursor(0,1);
+   PANTALLA_ESTRADA.print("Entrada Invalida");
+   delay(900);
+    break;
+    case '#': // boton invalido
+   PANTALLA_ESTRADA.setCursor(0,1);
+   PANTALLA_ESTRADA.print("Entrada Invalida");
+   delay(900);
+    break;
+  }
 } // Final del Switch
   }
-}
+
 void envio_arduino_secundario(){
   if(capacidad < 10){ // Menos del 10%
     digitalWrite(D0, LOW);
     digitalWrite(D1, LOW);
     digitalWrite(D2, LOW);
     digitalWrite(D3, LOW);
+    delay(200);
     }
     else if(capacidad >= 10 && capacidad <= 20){ // entre 10 y 20%
     digitalWrite(D0, LOW);
     digitalWrite(D1, LOW);
     digitalWrite(D2, LOW);
     digitalWrite(D3, HIGH);
+    delay(200);
     }
     else if(capacidad > 20 && capacidad <= 30){  // entre 20 y 30%
     digitalWrite(D0, LOW);
     digitalWrite(D1, LOW);
     digitalWrite(D2, HIGH);
     digitalWrite(D3, LOW);
+    delay(200);
     }
     else if(capacidad > 30 && capacidad <= 40){  // entre 30 y 40%
     digitalWrite(D0, LOW);
     digitalWrite(D1, LOW);
     digitalWrite(D2, HIGH);
     digitalWrite(D3, HIGH);
+    delay(200);
     }
     else if(capacidad > 40 && capacidad <= 50){  // entre 40 y 50%
     digitalWrite(D0, LOW);
     digitalWrite(D1, HIGH);
     digitalWrite(D2, LOW);
     digitalWrite(D3, LOW);
+    delay(200);
     }
-    else if(capacidad > 50 && capacidad <= 60){  // entre 40 y 50%
+    else if(capacidad > 50 && capacidad <= 60){  // entre 50 y 60%
     digitalWrite(D0, LOW);
     digitalWrite(D1, HIGH);
     digitalWrite(D2, LOW);
     digitalWrite(D3, HIGH);
     }
-    else if(capacidad > 60 && capacidad <= 70){  // entre 50 y 60%
+    else if(capacidad > 60 && capacidad <= 70){  // entre 60 y 70%
     digitalWrite(D0, LOW);
     digitalWrite(D1, HIGH);
     digitalWrite(D2, HIGH);
     digitalWrite(D3, LOW);
+    delay(200);
     }
-    else if(capacidad > 70 && capacidad <= 80){  // entre 60 y 70%
+    else if(capacidad > 70 && capacidad <= 80){  // entre 70 y 80%
     digitalWrite(D0, LOW);
     digitalWrite(D1, HIGH);
     digitalWrite(D2, HIGH);
     digitalWrite(D3, HIGH);
+    delay(200);
     }
-    else if(capacidad > 80 && capacidad <= 90){  // entre 70 y 80%
+    else if(capacidad > 80 && capacidad <= 90){  // entre 80 y 90%
     digitalWrite(D0, HIGH);
     digitalWrite(D1, LOW);
     digitalWrite(D2, LOW);
     digitalWrite(D3, LOW);
+    delay(200);
     }
-    else if(capacidad > 90 && capacidad < 100){   // entre 80 y 90%
+    else if(capacidad > 90 && capacidad < 95){   // entre 90 y 100%
     digitalWrite(D0, HIGH);
     digitalWrite(D1, LOW);
     digitalWrite(D2, LOW);
     digitalWrite(D3, HIGH);
+    delay(200);
     }
-    else if(capacidad > 100){   // 100%
+    else if(capacidad >= 95){   // 100%
     digitalWrite(D0, HIGH);
     digitalWrite(D1, LOW);
     digitalWrite(D2, HIGH);
     digitalWrite(D3, HIGH);
+    delay(200);
     }
 }

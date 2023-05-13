@@ -23,32 +23,28 @@
  int D1;
  int D2;
  int D3;
- int porcentaje;
+ char array[2];
  
 void setup() {
-  pinMode(in0, INPUT);
-  pinMode(in1, INPUT);
-  pinMode(in2, INPUT);
-  pinMode(in3, INPUT);   // Definir las entradas del Arduino principal al secundario
+  Serial.begin(9600);
+ 
+  
   for(int i = 2; i < 13; i++){
     pinMode(i, OUTPUT);
-    }
+    
+  }
 }
 
 void loop() {
-  lecturas();
  conversion_binaria();
+ porcentaje = Serial.read();
+  Serial.println(porcentaje);
+  delay(500);
 }
 
-bool lecturas(){
-  D0 = digitalRead(in0);
-  D1 = digitalRead(in1);
-  D2 = digitalRead(in2);
-  D3 = digitalRead(in3);
-  }
 
 int conversion_binaria(){
-  if(D0 == LOW && D1 == LOW && D2 == LOW && D3 == LOW){ // entre 0 y 10%
+  if(porcentaje == 10){ // entre 0 y 10%
     for(int i = 2; i < 13; i++){
     digitalWrite(i, HIGH);
     }
@@ -58,7 +54,7 @@ int conversion_binaria(){
     }
     delay(500);
     }
-  if(D0 == LOW && D1 == LOW && D2 == LOW && D3 == HIGH){    //entre 10 y 20%
+  if(porcentaje > 10 && porcentaje < 20){    //entre 10 y 20%
     digitalWrite(2, HIGH);
     digitalWrite(3, LOW);
     digitalWrite(4, LOW);
@@ -70,7 +66,7 @@ int conversion_binaria(){
     digitalWrite(10, LOW);
     digitalWrite(11, LOW);
     }
-    if(D0 == LOW && D1 == LOW && D2 == HIGH && D3 == LOW){    //entre 20 y 30%
+    if(porcentaje > 20 && porcentaje < 30){    //entre 20 y 30%
     digitalWrite(2, HIGH);
     digitalWrite(3, HIGH);
     digitalWrite(4, LOW);
@@ -82,7 +78,7 @@ int conversion_binaria(){
     digitalWrite(10, LOW);
     digitalWrite(11, LOW);
     }
-    if(D0 == LOW && D1 == LOW && D2 == HIGH && D3 == HIGH){      //entre 30 y 40%
+    if(porcentaje > 30 && porcentaje < 40){      //entre 30 y 40%
     digitalWrite(2, HIGH);
     digitalWrite(3, HIGH);
     digitalWrite(4, HIGH);
@@ -94,7 +90,7 @@ int conversion_binaria(){
     digitalWrite(10, LOW);
     digitalWrite(11, LOW);
     } 
-    if(D0 == LOW && D1 == HIGH && D2 == LOW && D3 == LOW){      //entre 40 y 50%
+    if(porcentaje > 40 && porcentaje < 50){      //entre 40 y 50%
     digitalWrite(2, HIGH);
     digitalWrite(3, HIGH);
     digitalWrite(4, HIGH);
@@ -106,7 +102,7 @@ int conversion_binaria(){
     digitalWrite(10, LOW);
     digitalWrite(11, LOW);
     }
-    if(D0 == LOW && D1 == HIGH && D2 == LOW && D3 == HIGH){      //entre 50 y 60%
+    if(porcentaje > 50 && porcentaje < 60){      //entre 50 y 60%
     digitalWrite(2, HIGH);
     digitalWrite(3, HIGH);
     digitalWrite(4, HIGH);
@@ -118,7 +114,7 @@ int conversion_binaria(){
     digitalWrite(10, LOW);
     digitalWrite(11, LOW);
     }
-    if(D0 == LOW && D1 == HIGH && D2 == HIGH && D3 == LOW){      //entre 60 y 70%
+    if(porcentaje > 60 && porcentaje < 70){      //entre 60 y 70%
     digitalWrite(2, HIGH);
     digitalWrite(3, HIGH);
     digitalWrite(4, HIGH);
@@ -130,7 +126,7 @@ int conversion_binaria(){
     digitalWrite(10, LOW);
     digitalWrite(11, LOW);
     }
-    if(D0 == LOW && D1 == HIGH && D2 == HIGH && D3 == HIGH){      //entre 70 y 80%
+    if(porcentaje > 70 && porcentaje < 80){      //entre 70 y 80%
     digitalWrite(2, HIGH);
     digitalWrite(3, HIGH);
     digitalWrite(4, HIGH);
@@ -142,7 +138,7 @@ int conversion_binaria(){
     digitalWrite(10, LOW);
     digitalWrite(11, LOW);
     }
-    if(D0 == HIGH && D1 == LOW && D2 == LOW && D3 == LOW){      //entre 80 y 90%
+    if(porcentaje > 80 && porcentaje < 90){      //entre 80 y 90%
     digitalWrite(2, HIGH);
     digitalWrite(3, HIGH);
     digitalWrite(4, HIGH);
@@ -154,7 +150,7 @@ int conversion_binaria(){
     digitalWrite(10, LOW);
     digitalWrite(11, LOW);
     }
-    if(D0 == HIGH && D1 == LOW && D2 == LOW && D3 == HIGH){      //entre 90 y 100%
+    if(porcentaje > 90 && porcentaje < 100){      //entre 90 y 100%
     digitalWrite(2, HIGH);
     digitalWrite(3, HIGH);
     digitalWrite(4, HIGH);
@@ -166,7 +162,7 @@ int conversion_binaria(){
     digitalWrite(10, HIGH);
     digitalWrite(11, LOW);
     }
-    if(D0 == HIGH && D1 == LOW && D2 == HIGH && D3 == HIGH){      //100%
+    if(porcentaje == "100"){      //100%
     digitalWrite(2, HIGH);
     digitalWrite(3, HIGH);
     digitalWrite(4, HIGH);
