@@ -13,22 +13,12 @@
 // ARDUINO SECUNDARIO
 
 //Directivas de preprocesador
- #define in0 14
- #define in1 15
- #define in2 16
- #define in3 17
 
  //Variables
- int D0;
- int D1;
- int D2;
- int D3;
- char array[2];
+ int porcentaje;
  
 void setup() {
   Serial.begin(9600);
- 
-  
   for(int i = 2; i < 13; i++){
     pinMode(i, OUTPUT);
     
@@ -36,10 +26,9 @@ void setup() {
 }
 
 void loop() {
- conversion_binaria();
- porcentaje = Serial.read();
-  Serial.println(porcentaje);
-  delay(500);
+   porcentaje = Serial.read();
+   conversion_binaria();
+   
 }
 
 

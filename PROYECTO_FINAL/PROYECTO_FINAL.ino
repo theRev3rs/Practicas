@@ -76,7 +76,6 @@ void loop() {
      PANTALLA_ESTRADA.print("Almacenado:");  //Imprimimos la palabra "Caracter"
    PANTALLA_ESTRADA.setCursor(11,0);  // Imprime la interfaz
    PANTALLA_ESTRADA.print(capacidad);
-   Serial.println(capacidad);//Porcentaje de granos dentro
    PANTALLA_ESTRADA.print("%  ");
    PANTALLA_ESTRADA.setCursor(0,1);
 PANTALLA_ESTRADA.print("Desea servir?   ");
@@ -298,79 +297,45 @@ switch(tecla){
 
 void envio_arduino_secundario(){
   if(capacidad < 10){ // Menos del 10%
-    digitalWrite(D0, LOW);
-    digitalWrite(D1, LOW);
-    digitalWrite(D2, LOW);
-    digitalWrite(D3, LOW);
-    delay(200);
+    Serial.println("0");//Porcentaje de granos dentro
     }
     else if(capacidad >= 10 && capacidad <= 20){ // entre 10 y 20%
-    digitalWrite(D0, LOW);
-    digitalWrite(D1, LOW);
-    digitalWrite(D2, LOW);
-    digitalWrite(D3, HIGH);
+    Serial.println("10");//Porcentaje de granos dentro
     delay(200);
     }
     else if(capacidad > 20 && capacidad <= 30){  // entre 20 y 30%
-    digitalWrite(D0, LOW);
-    digitalWrite(D1, LOW);
-    digitalWrite(D2, HIGH);
-    digitalWrite(D3, LOW);
+    Serial.println("20");//Porcentaje de granos dentro
     delay(200);
     }
     else if(capacidad > 30 && capacidad <= 40){  // entre 30 y 40%
-    digitalWrite(D0, LOW);
-    digitalWrite(D1, LOW);
-    digitalWrite(D2, HIGH);
-    digitalWrite(D3, HIGH);
+    Serial.println("30");//Porcentaje de granos dentro
     delay(200);
     }
     else if(capacidad > 40 && capacidad <= 50){  // entre 40 y 50%
-    digitalWrite(D0, LOW);
-    digitalWrite(D1, HIGH);
-    digitalWrite(D2, LOW);
-    digitalWrite(D3, LOW);
+    Serial.println("40");//Porcentaje de granos dentro
     delay(200);
     }
     else if(capacidad > 50 && capacidad <= 60){  // entre 50 y 60%
-    digitalWrite(D0, LOW);
-    digitalWrite(D1, HIGH);
-    digitalWrite(D2, LOW);
-    digitalWrite(D3, HIGH);
+    Serial.println("50");//Porcentaje de granos dentro
     }
     else if(capacidad > 60 && capacidad <= 70){  // entre 60 y 70%
-    digitalWrite(D0, LOW);
-    digitalWrite(D1, HIGH);
-    digitalWrite(D2, HIGH);
-    digitalWrite(D3, LOW);
+    Serial.println("60");//Porcentaje de granos dentro
     delay(200);
     }
     else if(capacidad > 70 && capacidad <= 80){  // entre 70 y 80%
-    digitalWrite(D0, LOW);
-    digitalWrite(D1, HIGH);
-    digitalWrite(D2, HIGH);
-    digitalWrite(D3, HIGH);
+    Serial.println("70");//Porcentaje de granos dentro
     delay(200);
     }
     else if(capacidad > 80 && capacidad <= 90){  // entre 80 y 90%
-    digitalWrite(D0, HIGH);
-    digitalWrite(D1, LOW);
-    digitalWrite(D2, LOW);
-    digitalWrite(D3, LOW);
+    Serial.println("80");//Porcentaje de granos dentro
     delay(200);
     }
     else if(capacidad > 90 && capacidad < 95){   // entre 90 y 100%
-    digitalWrite(D0, HIGH);
-    digitalWrite(D1, LOW);
-    digitalWrite(D2, LOW);
-    digitalWrite(D3, HIGH);
+    Serial.println("90");//Porcentaje de granos dentro
     delay(200);
     }
-    else if(capacidad >= 95){   // 100%
-    digitalWrite(D0, HIGH);
-    digitalWrite(D1, LOW);
-    digitalWrite(D2, HIGH);
-    digitalWrite(D3, HIGH);
+    else if(capacidad >= 99){   // 100%
+    Serial.println("100");//Porcentaje de granos dentro
     delay(200);
     }
 }
