@@ -26,25 +26,40 @@ void setup() {
 }
 
 void loop() {
-  delay(2);
-   porcentaje = Serial.read();
-   delay(500);
-   Serial.println(porcentaje);
-   display_barra();
+  if (Serial.available() > 0) {
+    // Leer el Monitor Serial
+    String dato = Serial.readString();
+
+    // Convertir el dato a un entero
+    porcentaje = dato.toInt();
+    // Llamar a funcion que interpreta la informacion
+    display_barra();
+  }
+   else {
+    for(int i = 2; i < 13; i++){
+    digitalWrite(i, HIGH);
+    }
+    delay(100);
+    for(int i = 2; i < 13; i++){
+    digitalWrite(i, LOW);
+    }
+    delay(100);
+    }
    
 }
 
 
 int display_barra(){
+  
   if(porcentaje == 0){ // entre 0 y 10%
     for(int i = 2; i < 13; i++){
     digitalWrite(i, HIGH);
+    delay(100);
     }
-    delay(500);
     for(int i = 2; i < 13; i++){
     digitalWrite(i, LOW);
+    delay(100);
     }
-    delay(500);
     }
   if(porcentaje == 10){    //entre 10 y 20%
     digitalWrite(2, HIGH);
