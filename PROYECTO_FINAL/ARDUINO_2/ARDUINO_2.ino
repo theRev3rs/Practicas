@@ -26,14 +26,17 @@ void setup() {
 }
 
 void loop() {
+  delay(2);
    porcentaje = Serial.read();
-   conversion_binaria();
+   delay(500);
+   Serial.println(porcentaje);
+   display_barra();
    
 }
 
 
-int conversion_binaria(){
-  if(porcentaje == 10){ // entre 0 y 10%
+int display_barra(){
+  if(porcentaje == 0){ // entre 0 y 10%
     for(int i = 2; i < 13; i++){
     digitalWrite(i, HIGH);
     }
@@ -43,7 +46,7 @@ int conversion_binaria(){
     }
     delay(500);
     }
-  if(porcentaje > 10 && porcentaje < 20){    //entre 10 y 20%
+  if(porcentaje == 10){    //entre 10 y 20%
     digitalWrite(2, HIGH);
     digitalWrite(3, LOW);
     digitalWrite(4, LOW);
@@ -55,7 +58,7 @@ int conversion_binaria(){
     digitalWrite(10, LOW);
     digitalWrite(11, LOW);
     }
-    if(porcentaje > 20 && porcentaje < 30){    //entre 20 y 30%
+    if(porcentaje == 20){    //entre 20 y 30%
     digitalWrite(2, HIGH);
     digitalWrite(3, HIGH);
     digitalWrite(4, LOW);
@@ -67,7 +70,7 @@ int conversion_binaria(){
     digitalWrite(10, LOW);
     digitalWrite(11, LOW);
     }
-    if(porcentaje > 30 && porcentaje < 40){      //entre 30 y 40%
+    if(porcentaje == 30){      //entre 30 y 40%
     digitalWrite(2, HIGH);
     digitalWrite(3, HIGH);
     digitalWrite(4, HIGH);
@@ -79,7 +82,7 @@ int conversion_binaria(){
     digitalWrite(10, LOW);
     digitalWrite(11, LOW);
     } 
-    if(porcentaje > 40 && porcentaje < 50){      //entre 40 y 50%
+    if(porcentaje == 40){      //entre 40 y 50%
     digitalWrite(2, HIGH);
     digitalWrite(3, HIGH);
     digitalWrite(4, HIGH);
@@ -91,7 +94,7 @@ int conversion_binaria(){
     digitalWrite(10, LOW);
     digitalWrite(11, LOW);
     }
-    if(porcentaje > 50 && porcentaje < 60){      //entre 50 y 60%
+    if(porcentaje == 50){      //entre 50 y 60%
     digitalWrite(2, HIGH);
     digitalWrite(3, HIGH);
     digitalWrite(4, HIGH);
@@ -103,7 +106,7 @@ int conversion_binaria(){
     digitalWrite(10, LOW);
     digitalWrite(11, LOW);
     }
-    if(porcentaje > 60 && porcentaje < 70){      //entre 60 y 70%
+    if(porcentaje == 60){      //entre 60 y 70%
     digitalWrite(2, HIGH);
     digitalWrite(3, HIGH);
     digitalWrite(4, HIGH);
@@ -115,7 +118,7 @@ int conversion_binaria(){
     digitalWrite(10, LOW);
     digitalWrite(11, LOW);
     }
-    if(porcentaje > 70 && porcentaje < 80){      //entre 70 y 80%
+    if(porcentaje == 70){      //entre 70 y 80%
     digitalWrite(2, HIGH);
     digitalWrite(3, HIGH);
     digitalWrite(4, HIGH);
@@ -127,7 +130,7 @@ int conversion_binaria(){
     digitalWrite(10, LOW);
     digitalWrite(11, LOW);
     }
-    if(porcentaje > 80 && porcentaje < 90){      //entre 80 y 90%
+    if(porcentaje == 80 ){      //entre 80 y 90%
     digitalWrite(2, HIGH);
     digitalWrite(3, HIGH);
     digitalWrite(4, HIGH);
@@ -139,7 +142,7 @@ int conversion_binaria(){
     digitalWrite(10, LOW);
     digitalWrite(11, LOW);
     }
-    if(porcentaje > 90 && porcentaje < 100){      //entre 90 y 100%
+    if(porcentaje == 90){      //entre 90 y 100%
     digitalWrite(2, HIGH);
     digitalWrite(3, HIGH);
     digitalWrite(4, HIGH);
@@ -151,7 +154,7 @@ int conversion_binaria(){
     digitalWrite(10, HIGH);
     digitalWrite(11, LOW);
     }
-    if(porcentaje == "100"){      //100%
+    if(porcentaje == 100){      //100%
     digitalWrite(2, HIGH);
     digitalWrite(3, HIGH);
     digitalWrite(4, HIGH);
@@ -163,4 +166,15 @@ int conversion_binaria(){
     digitalWrite(10, HIGH);
     digitalWrite(11, HIGH);
     }
+    else{
+      for(int i = 2; i < 13; i++){
+    digitalWrite(i, HIGH);
     }
+    delay(100);
+    for(int i = 2; i < 13; i++){
+    digitalWrite(i, LOW);
+    }
+    delay(100);
+    }
+      }
+    

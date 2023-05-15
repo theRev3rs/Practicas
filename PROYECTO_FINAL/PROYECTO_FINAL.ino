@@ -28,12 +28,6 @@
 #define rows 4
 #define pin_Servo 3
 
-//Pines para envio al Arduino Secundario
-#define D0 14
-#define D1 15
-#define D2 16
-#define D3 17
-
 char keys[rows][cols] = {
   {'1','2','3','A'},
   {'4','5','6','B'},
@@ -95,7 +89,7 @@ float medicion(){
   t = pulseIn(echo, HIGH);
   d = t/59;
   delay(500);
-  int porcentaje = (d/30)*100;
+  int porcentaje = (d/32)*100;
   
   return porcentaje;
 }
@@ -296,6 +290,7 @@ switch(tecla){
   }
 
 void envio_arduino_secundario(){
+  
   if(capacidad < 10){ // Menos del 10%
     Serial.println("0");//Porcentaje de granos dentro
     }
@@ -337,5 +332,7 @@ void envio_arduino_secundario(){
     else if(capacidad >= 99){   // 100%
     Serial.println("100");//Porcentaje de granos dentro
     delay(200);
+    
     }
+    
 }
