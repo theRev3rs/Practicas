@@ -16,65 +16,52 @@
 
  //Variables
  int porcentaje;
+ #define pin0 13
+ #define pin1 14
+ #define pin2 15
+ #define pin3 16
+ bool D0;
+ bool D1;
+ bool D2;
+ bool D3;
  
 void setup() {
   Serial.begin(9600);
-  for(int i = 2; i < 13; i++){
+  for(int i = 3; i < 13; i++){
     pinMode(i, OUTPUT);
-    
   }
+   pinMode(13, INPUT);
+    pinMode(14, INPUT);
+    pinMode(15, INPUT);
+    pinMode(16, INPUT);
+    delay(2000);
 }
 
 void loop() {
-  if (Serial.available() > 0) {
-    // Leer el Monitor Serial
-    String dato = Serial.readString();
-
-    // Convertir el dato a un entero
-    porcentaje = dato.toInt();
-    // Llamar a funcion que interpreta la informacion
-    display_barra();
-  }
-   else {
-    for(int i = 2; i < 13; i++){
-    digitalWrite(i, HIGH);
-    }
-    delay(100);
-    for(int i = 2; i < 13; i++){
-    digitalWrite(i, LOW);
-    }
-    delay(100);
-    }
-   
+   D0 = digitalRead(pin0);
+   D1 = digitalRead(pin1);
+   D2 = digitalRead(pin2);
+   D3 = digitalRead(pin3);
+   Serial.print(D3);
+   Serial.print(D2);
+   Serial.print(D1);
+   Serial.println(D0);
+   display_barra();
 }
 
 
 int display_barra(){
-  
-  if(porcentaje == 0){ // entre 0 y 10%
-    for(int i = 2; i < 13; i++){
+  if( D3 == 0 && D2 == 0 && D1 == 0 && D0 == 0 ){ // entre 0 y 10%
+    for(int i = 3; i < 13; i++){
     digitalWrite(i, HIGH);
-    delay(100);
     }
-    for(int i = 2; i < 13; i++){
+    delay(50);
+    for(int i = 3; i < 13; i++){
     digitalWrite(i, LOW);
-    delay(100);
     }
+    delay(50);
     }
-  if(porcentaje == 10){    //entre 10 y 20%
-    digitalWrite(2, HIGH);
-    digitalWrite(3, LOW);
-    digitalWrite(4, LOW);
-    digitalWrite(5, LOW);
-    digitalWrite(6, LOW);
-    digitalWrite(7, LOW);
-    digitalWrite(8, LOW);
-    digitalWrite(9, LOW);
-    digitalWrite(10, LOW);
-    digitalWrite(11, LOW);
-    }
-    if(porcentaje == 20){    //entre 20 y 30%
-    digitalWrite(2, HIGH);
+  if(D3 == 0 && D2 == 0 && D1 == 0 && D0 == 1){    //entre 10 y 20%
     digitalWrite(3, HIGH);
     digitalWrite(4, LOW);
     digitalWrite(5, LOW);
@@ -84,9 +71,9 @@ int display_barra(){
     digitalWrite(9, LOW);
     digitalWrite(10, LOW);
     digitalWrite(11, LOW);
+    digitalWrite(12, LOW);
     }
-    if(porcentaje == 30){      //entre 30 y 40%
-    digitalWrite(2, HIGH);
+    if(D3 == 0 && D2 == 0 && D1 == 1 && D0 == 0){    //entre 20 y 30%
     digitalWrite(3, HIGH);
     digitalWrite(4, HIGH);
     digitalWrite(5, LOW);
@@ -96,9 +83,9 @@ int display_barra(){
     digitalWrite(9, LOW);
     digitalWrite(10, LOW);
     digitalWrite(11, LOW);
-    } 
-    if(porcentaje == 40){      //entre 40 y 50%
-    digitalWrite(2, HIGH);
+    digitalWrite(12, LOW);
+    }
+    if(D3 == 0 && D2 == 0 && D1 == 1 && D0 == 1){      //entre 30 y 40%
     digitalWrite(3, HIGH);
     digitalWrite(4, HIGH);
     digitalWrite(5, HIGH);
@@ -108,9 +95,9 @@ int display_barra(){
     digitalWrite(9, LOW);
     digitalWrite(10, LOW);
     digitalWrite(11, LOW);
-    }
-    if(porcentaje == 50){      //entre 50 y 60%
-    digitalWrite(2, HIGH);
+    digitalWrite(12, LOW);
+    } 
+    if(D3 == 0 && D2 == 1 && D1 == 0 && D0 == 0){      //entre 40 y 50%
     digitalWrite(3, HIGH);
     digitalWrite(4, HIGH);
     digitalWrite(5, HIGH);
@@ -120,9 +107,9 @@ int display_barra(){
     digitalWrite(9, LOW);
     digitalWrite(10, LOW);
     digitalWrite(11, LOW);
+    digitalWrite(12, LOW);
     }
-    if(porcentaje == 60){      //entre 60 y 70%
-    digitalWrite(2, HIGH);
+    if(D3 == 0 && D2 == 1 && D1 == 0 && D0 == 1){      //entre 50 y 60%
     digitalWrite(3, HIGH);
     digitalWrite(4, HIGH);
     digitalWrite(5, HIGH);
@@ -132,9 +119,9 @@ int display_barra(){
     digitalWrite(9, LOW);
     digitalWrite(10, LOW);
     digitalWrite(11, LOW);
+    digitalWrite(12, LOW);
     }
-    if(porcentaje == 70){      //entre 70 y 80%
-    digitalWrite(2, HIGH);
+    if(D3 == 0 && D2 == 1 && D1 == 1 && D0 == 0){      //entre 60 y 70%
     digitalWrite(3, HIGH);
     digitalWrite(4, HIGH);
     digitalWrite(5, HIGH);
@@ -144,9 +131,9 @@ int display_barra(){
     digitalWrite(9, LOW);
     digitalWrite(10, LOW);
     digitalWrite(11, LOW);
+    digitalWrite(12, LOW);
     }
-    if(porcentaje == 80 ){      //entre 80 y 90%
-    digitalWrite(2, HIGH);
+    if(D3 == 0 && D2 == 1 && D1 == 1 && D0 == 1){      //entre 70 y 80%
     digitalWrite(3, HIGH);
     digitalWrite(4, HIGH);
     digitalWrite(5, HIGH);
@@ -156,9 +143,9 @@ int display_barra(){
     digitalWrite(9, HIGH);
     digitalWrite(10, LOW);
     digitalWrite(11, LOW);
+    digitalWrite(12, LOW);
     }
-    if(porcentaje == 90){      //entre 90 y 100%
-    digitalWrite(2, HIGH);
+    if(D3 == 1 && D2 == 0 && D1 == 0 && D0 == 0){      //entre 80 y 90%
     digitalWrite(3, HIGH);
     digitalWrite(4, HIGH);
     digitalWrite(5, HIGH);
@@ -168,9 +155,9 @@ int display_barra(){
     digitalWrite(9, HIGH);
     digitalWrite(10, HIGH);
     digitalWrite(11, LOW);
+    digitalWrite(12, LOW);
     }
-    if(porcentaje == 100){      //100%
-    digitalWrite(2, HIGH);
+    if(D3 == 1 && D2 == 0 && D1 == 0 && D0 == 1){      //entre 90 y 100%
     digitalWrite(3, HIGH);
     digitalWrite(4, HIGH);
     digitalWrite(5, HIGH);
@@ -180,16 +167,23 @@ int display_barra(){
     digitalWrite(9, HIGH);
     digitalWrite(10, HIGH);
     digitalWrite(11, HIGH);
+    digitalWrite(12, LOW);
     }
-    else{
-      for(int i = 2; i < 13; i++){
-    digitalWrite(i, HIGH);
-    }
+    if(D3 == 1 && D2 == 0 && D1 == 1 && D0 == 0){      // Excede al capacidad recomendada
+    digitalWrite(3, HIGH);
+    digitalWrite(4, HIGH);
+    digitalWrite(5, HIGH);
+    digitalWrite(6, HIGH);
+    digitalWrite(7, HIGH);
+    digitalWrite(8, HIGH);
+    digitalWrite(9, HIGH);
+    digitalWrite(10, HIGH);
+    digitalWrite(11, HIGH);
+    digitalWrite(12, HIGH);
     delay(100);
-    for(int i = 2; i < 13; i++){
-    digitalWrite(i, LOW);
-    }
+    digitalWrite(12, LOW);
     delay(100);
     }
-      }
+    }
+      
     
