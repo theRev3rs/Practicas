@@ -13,14 +13,13 @@
 // ARDUINO SECUNDARIO
 
 //Directivas de preprocesador
-
- //Variables
- int porcentaje;
  #define pin0 13
  #define pin1 14
  #define pin2 15
  #define pin3 16
  #define buzz 17
+
+ //Variables
  bool D0;
  bool D1;
  bool D2;
