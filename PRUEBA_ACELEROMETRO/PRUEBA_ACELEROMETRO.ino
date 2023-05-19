@@ -14,7 +14,7 @@ int promx;
 int promy;
 int promxy;
 int Sensor = A0;
-#define alerta 8
+#define alerta 4
 void setup()
 {
   pinMode(alerta, OUTPUT);
