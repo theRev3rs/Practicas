@@ -13,13 +13,13 @@
 // ARDUINO SECUNDARIO
 
 //Directivas de preprocesador
+
+ //Variables
+ int porcentaje;
  #define pin0 13
  #define pin1 14
  #define pin2 15
  #define pin3 16
- #define buzz 17
-
- //Variables
  bool D0;
  bool D1;
  bool D2;
@@ -55,13 +55,11 @@ int display_barra(){
     for(int i = 3; i < 13; i++){
     digitalWrite(i, HIGH);
     }
-    tone(buzz, 440, 10);
     delay(50);
     for(int i = 3; i < 13; i++){
     digitalWrite(i, LOW);
     }
     delay(50);
-    noTone(buzz);
     }
   if(D3 == 0 && D2 == 0 && D1 == 0 && D0 == 1){    //entre 10 y 20%
     digitalWrite(3, HIGH);
