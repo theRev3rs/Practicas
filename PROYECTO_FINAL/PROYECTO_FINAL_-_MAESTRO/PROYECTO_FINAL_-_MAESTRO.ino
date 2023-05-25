@@ -32,8 +32,7 @@
  #define pin2 15
  #define pin3 16
 #define BUZZER 17
- int a=135;
- int b=89;
+ 
 
 char keys[rows][cols] = {
   {'1','2','3','A'},
@@ -51,7 +50,8 @@ Servo SERVO_SILO;
 //Variables
 float d;
 int  capacidad;
-
+int a=120;
+ int b=60;
 
 //Funciones
 int medicion();
@@ -101,7 +101,7 @@ int medicion(void){
   t = pulseIn(echo, HIGH);
   d = t/59;
   PANTALLA_SILO.setCursor(0,1);
-  PANTALLA_SILO.print(d);
+  PANTALLA_SILO.print(30-d);
   PANTALLA_SILO.print("     cm        ");
   delay(500);
   int porcentaje = ((d)/22.26)*100;
@@ -115,38 +115,39 @@ int lectura_teclado(){
 switch(tecla){
   
    case '1': // Primera unidad de tamizaje
-   if(capacidad >= 5){ // Ejemplo del porcentaje minimo para completar la solicitud
+   if(capacidad >= 2){ // Ejemplo del porcentaje minimo para completar la solicitud
    PANTALLA_SILO.setCursor(0,1);
    PANTALLA_SILO.print("Sirviendo: 1onz");
       Serial.println(capacidad);
       SERVO_SILO.write(a);
-      delay(1400);
+      delay(1000);
       SERVO_SILO.write(b);
       delay(500);
       envio_arduino_secundario(); // Envio de datos al Arduino secundario
       break;
    } else{    // En caso de que no sea suficiente para completar la solicitud
-    tone(BUZZER, 1760);
-    delay(100);
-    noTone(BUZZER);
+    
     for(int i = 0; i < 5; i++){
      PANTALLA_SILO.setCursor(0,1);
      PANTALLA_SILO.print("      Error     ");
      delay(500);
      PANTALLA_SILO.setCursor(0,1);
      PANTALLA_SILO.print("  Insuficiente  ");
+     tone(BUZZER, 1760);
+    delay(100);
+    noTone(BUZZER);
      delay(500);
     }
     break;
   }
 
   case '2': // Segunda unidad de tamizaje
-   if(capacidad >= 10){ // Ejemplo del porcentaje minimo para completar la solicitud
+   if(capacidad >= 3){ // Ejemplo del porcentaje minimo para completar la solicitud
    PANTALLA_SILO.setCursor(0,1);
    PANTALLA_SILO.print("Sirviendo: 2onz");
       Serial.println(capacidad);
       SERVO_SILO.write(a);
-      delay(2350);
+      delay(1800);
       SERVO_SILO.write(b);
       delay(500);
       envio_arduino_secundario(); // Envio de datos al Arduino secundario
@@ -167,12 +168,12 @@ switch(tecla){
   }
 
   case '3': // Tercera unidad de tamizaje
-   if(capacidad >= 15){ // Ejemplo del porcentaje minimo para completar la solicitud
+   if(capacidad >= 4){ // Ejemplo del porcentaje minimo para completar la solicitud
    PANTALLA_SILO.setCursor(0,1);
    PANTALLA_SILO.print("Sirviendo: 4onz");
       Serial.println(capacidad);
       SERVO_SILO.write(a);
-      delay(3000);
+      delay(3100);
       SERVO_SILO.write(b);
       delay(500);
       envio_arduino_secundario(); // Envio de datos al Arduino secundario
@@ -193,12 +194,12 @@ switch(tecla){
   }
 
   case '4': // Cuarta unidad de tamizaje
-   if(capacidad >= 20){ // Ejemplo del porcentaje minimo para completar la solicitud
+   if(capacidad >= 10){ // Ejemplo del porcentaje minimo para completar la solicitud
    PANTALLA_SILO.setCursor(0,1);
-   PANTALLA_SILO.print("Sirviendo: 8onz");
+   PANTALLA_SILO.print("Sirviendo: 6onz");
       Serial.println(capacidad);
       SERVO_SILO.write(a);
-      delay(7600);
+      delay(4000);
       SERVO_SILO.write(b);
       delay(500);
       envio_arduino_secundario(); // Envio de datos al Arduino secundario
@@ -218,12 +219,12 @@ switch(tecla){
     break;
   }
   case '5': // Quinta unidad de tamizaje
-   if(capacidad >= 30){ // Ejemplo del porcentaje minimo para completar la solicitud
+   if(capacidad >= 14){ // Ejemplo del porcentaje minimo para completar la solicitud
    PANTALLA_SILO.setCursor(0,1);
-   PANTALLA_SILO.print("Sirviendo:12onz");
+   PANTALLA_SILO.print("Sirviendo:8onz");
       Serial.println(capacidad);
       SERVO_SILO.write(a);
-      delay(11750);
+      delay(6200);
       SERVO_SILO.write(b);
       delay(500);
       envio_arduino_secundario(); // Envio de datos al Arduino secundario
@@ -244,12 +245,12 @@ switch(tecla){
   }
 
   case '6': // Sexta unidad de tamizaje
-   if(capacidad >= 45){ // Ejemplo del porcentaje minimo para completar la solicitud
+   if(capacidad >= 16){ // Ejemplo del porcentaje minimo para completar la solicitud
    PANTALLA_SILO.setCursor(0,1);
-   PANTALLA_SILO.print("Sirviendo:16onz");
+   PANTALLA_SILO.print("Sirviendo:1 lb");
       Serial.println(capacidad);
       SERVO_SILO.write(a);
-      delay(30000);
+      delay(7000);
       SERVO_SILO.write(b);
       delay(500);
       envio_arduino_secundario(); // Envio de datos al Arduino secundario
