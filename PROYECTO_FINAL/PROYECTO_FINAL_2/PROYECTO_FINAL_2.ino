@@ -83,8 +83,6 @@ void loop() {
    PANTALLA_ESTRADA.setCursor(11,0);  // Imprime la interfaz
    PANTALLA_ESTRADA.print(capacidad);
    PANTALLA_ESTRADA.print("%  ");
-   PANTALLA_ESTRADA.setCursor(0,1);
-PANTALLA_ESTRADA.print("Desea servir?   ");
    }
    else if( capacidad < 0){
     PANTALLA_ESTRADA.setCursor(0,0);
@@ -100,6 +98,8 @@ int medicion(void){
   digitalWrite(trig, LOW);
   t = pulseIn(echo, HIGH);
   d = t/59;
+  PANTALLA_ESTRADA.setCursor(0,1);
+  PANTALLA_ESTRADA.print(d-30);
   int porcentaje = ((d)/30)*100;
   delay(100);
   return porcentaje;
