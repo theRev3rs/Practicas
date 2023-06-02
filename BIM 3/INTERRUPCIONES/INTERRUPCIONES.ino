@@ -76,7 +76,6 @@ pinMode(d2, OUTPUT);
 pinMode(e2, OUTPUT);
 pinMode(f2, OUTPUT);
 pinMode(g2, OUTPUT);
-pinMode(builtinled, OUTPUT);
 }
 
 void loop() {
@@ -100,7 +99,7 @@ void funcion_ISR_rising(){
 void funcion_ISR_falling(){
     //Cuando se dispara la interrupcion por Falling
   resta_unidad();
-  }
+}
 int suma_unidad(){ // Suma un numero
   unidad++;
   Serial.println(unidad);
