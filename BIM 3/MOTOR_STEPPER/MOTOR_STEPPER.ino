@@ -6,8 +6,8 @@
 #define ledV 9
 #define ledA 10
 #define ledR 11
-#define clockwise 2
-#define anticlockwise 3
+#define clockwise 3
+#define anticlockwise 2
 #define duplicar_rpm 8
 
 //variables
