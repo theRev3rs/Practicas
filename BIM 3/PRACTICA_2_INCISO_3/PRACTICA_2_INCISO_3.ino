@@ -1,3 +1,14 @@
+/*
+*Fundacion Kinal
+*Centro Educativo Tecnico Laboral Kinal
+*Electronica
+*Grado: Quinto
+*Seccion: A
+*Cuerso: Taller de Electronica Digital y Reparacion de Computadoras I
+*Nombre: Ricardo Estrada
+*Carnet: 2019553
+*Proyecto: Regular brillo de un led con potenciometro
+*/
 //Librerias
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
