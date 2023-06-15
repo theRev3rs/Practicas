@@ -18,13 +18,13 @@
 #define led_Azul  2   //led azul conectado al pin 3
 #define led_Verde 3   //led verde conectado al pin 4
 #define led_Rojo  4   //led rojo conectado al pin 5
-#define pinA 15
-#define pinB 16
-#define pinC 17
-#define pinD 18
-#define objeto 12
-#define valido 8
-#define invalido 9
+#define pinA 15  //Pines del Stepper
+#define pinB 16  //Pines del Stepper
+#define pinC 17  //Pines del Stepper
+#define pinD 18  //Pines del Stepper
+#define objeto 12  //Sensor de objetos
+#define valido 8   //Indicador de verde detectado
+#define invalido 9  //Indicador de verde no detectado
 
 //Variables
 //Valores analogicos de la intensidad de cada color
@@ -35,8 +35,8 @@ int resultado;
 //Valor de umbral para los colores
 int tol = 8; //este valor lo podremos cambiar segun los valores leidos por nuestra LDR
 //Constructor
-Stepper Banda(2048,pinA,pinC,pinB,pinD);
-Servo piston;
+Stepper Banda(2048,pinA,pinC,pinB,pinD);   //Constructor del Stepper
+Servo piston;  //Constructor del Servo
 
 void setup() {
   //Comunicacion serial
@@ -55,16 +55,18 @@ void setup() {
   digitalWrite(led_Verde, LOW);
   digitalWrite(led_Rojo, LOW);
   
-  //Servo y Banda  
+  //Configuracion Banda  
   Banda.setSpeed(15);
+  //Configuracion Servo
   piston.attach(6);
+  piston.write(180);  //Posicion de inicio del Servo
 }
 
 void loop() {
-  if(digitalRead(objeto) == true){
-    Banda.step(1);
+  if(digitalRead(objeto) == true){  //Si no hay un objeto
+    Banda.step(-1);
     }
-    if(digitalRead(objeto) == false){
+    if(digitalRead(objeto) == false){   //Si hay un objeto
     color();
     }
 }
@@ -102,26 +104,24 @@ int color(){
   digitalWrite(led_Azul, LOW);
   delay(50);
 
-  if(resultado_verde > resultado_azul && resultado_verde > resultado_rojo){
-    digitalWrite(valido, HIGH);
+  if(resultado_verde > resultado_azul && resultado_verde > resultado_rojo){  //Si el valor de verde es mayor a los demas
+    digitalWrite(valido, HIGH); //Aviso de verde detectado
     Serial.println("Verde OK");
-    delay(100);
-    Serial.println("Posicionando...");
-    Banda.step(2048);
-    delay(100);
     Serial.println("Posicionado");
-    piston.write(180);
+    Banda.step(-2048);    //Mueve el objeto a la posicion del Servo
+    delay(100);
     Serial.println("Piston");
-    delay(2000);
-    piston.write(0);
-    digitalWrite(valido, LOW);
+    piston.write(0);  // Mueve el servo a la posicion de empuje
+    delay(500);
+    piston.write(180);  //Regresa el servo a su posicion de inicio
+    digitalWrite(valido, LOW); //Apaga la luz de verde detectado
     }
     else{
-      Serial.println("No valido");
+      Serial.println("No valido");  //El color escaneado no es verde
       for(int i = 0; i < 12; i++){
       digitalWrite(invalido, !digitalRead(invalido));
       delay(100);
       }
-      Banda.step(2048);
+      Banda.step(-5000);   //Mueve el objeto fuera del rango del sensor de objetos para evitar lecturas en loop
       }
   }
