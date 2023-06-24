@@ -23,13 +23,13 @@
 #define pinStep4 13    //Pines del Stepper
 
 //Variables
-int item;
-int cantidad;
-int pos1 = 5000;   //Pasos para llegar y volver de la posicion 1 al Origen
-int pos2 = 8000;   //Pasos para llegar y volver de la posicion 2 al Origen
-int pos3 = 11000;  //Pasos para llegar y volver de la posicion 3 al Origen
-int pos4 = 14000;  //Pasos para llegar y volver de la posicion 4 al Origen
-int pos5 = 17000;  //Pasos para llegar y volver de la posicion 5 al Origen
+char item;
+int cantidad = 1;
+int pos1 = 2000;   //Pasos para llegar y volver de la posicion 1 al Origen
+int pos2 = 4000;   //Pasos para llegar y volver de la posicion 2 al Origen
+int pos3 = 6000;  //Pasos para llegar y volver de la posicion 3 al Origen
+int pos4 = 8000;  //Pasos para llegar y volver de la posicion 4 al Origen
+int pos5 = 10000;  //Pasos para llegar y volver de la posicion 5 al Origen
 int hold = 0;      //Angulo donde el Piston no obstruye
 int push = 180;    //Angulo donde el piston empuja
 
@@ -53,7 +53,7 @@ int lectura_bt(){
   posicion_empuje();
   }
 void posicion_empuje(){
-  if( item == 1 ){
+  if( item == 'A' ){
     
     act_line.step(pos1); //Moverse a la posicion del item 1
     delay(100);
@@ -66,7 +66,7 @@ void posicion_empuje(){
     }
     act_line.step(-pos1); //Se mueve de regreso al origen
     }
-  if( item == 2 ){
+  if( item == 'B' ){
     act_line.step(pos2); //Moverse a la posicion del item 1
     delay(100);
     for(int i = 0; i < cantidad; i++){  //Realiza el empuje segun cuantos items se necesiten
@@ -78,7 +78,7 @@ void posicion_empuje(){
     }
     act_line.step(-pos2); //Se mueve de regreso al origen
     }
-  if( item == 3 ){
+  if( item == 'C' ){
     act_line.step(pos3); //Moverse a la posicion del item 1
     delay(100);
     for(int i = 0; i < cantidad; i++){  //Realiza el empuje segun cuantos items se necesiten
@@ -91,7 +91,7 @@ void posicion_empuje(){
     act_line.step(-pos3); //Se mueve de regreso al origen
     }
 
-  if( item == 4 ){
+  if( item == 'D' ){
     act_line.step(pos4); //Moverse a la posicion del item 1
     delay(100);
     for(int i = 0; i < cantidad; i++){  //Realiza el empuje segun cuantos items se necesiten
@@ -103,7 +103,7 @@ void posicion_empuje(){
     }
     act_line.step(-pos4); //Se mueve de regreso al origen
     }
-  if( item == 5 ){
+  if( item == 'E' ){
     act_line.step(pos5); //Moverse a la posicion del item 1
     delay(100);
     for(int i = 0; i < cantidad; i++){  //Realiza el empuje segun cuantos items se necesiten
