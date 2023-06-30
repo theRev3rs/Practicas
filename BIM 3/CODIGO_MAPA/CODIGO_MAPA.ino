@@ -13,7 +13,7 @@
 //Variables
 bool respuesta; //Si la respuesta de la pregunta es correcta o incorrecta
 int num_pregunta;
-
+int conteo = 1;
 
 //Constructores
 Adafruit_NeoPixel pixels(NUMPIXELS, pinNeo, NEO_GRB + NEO_KHZ800); 
@@ -34,16 +34,35 @@ void loop() {
   if(Serial.available()>0){
       String empezar = Serial.readStringUntil('\n');
       if(empezar == String("Si")){
+        pixels.clear();
+        delay(50);
         num_pregunta = ruleta();
         responder();
       }
-  
+  else{
+    if(conteo<22){
+    conteo++;
+      }
+    if(conteo>22){
+    conteo = 1;
+      }    //patron de espera
+    pixels.setPixelColor(conteo, pixels.Color(0, 255, 0));
+    pixels.show();
+    delay(50);
+    pixels.setPixelColor(i-1, pixels.Color(0, 0, 255));
+    pixels.show();
+    delay(50);
+    pixels.setPixelColor(i+1, pixels.Color(255, 0, 0));
+    pixels.show();
+    delay(50);
+    
+    }
 }
 }
 
 int ruleta(){
     int num_random;
-//  num_random = random(1,preguntas); //Activar cuando ya esten las preguntas ajsjasjaj
+//  num_random = random(1,preguntas); //Activar cuando ya esten las preguntas ajsjasjaj ( No Hate )
     num_random = random(1, 4); //Activar cuando no hayan preguntas juas juas
     return num_random; //Regresa el numero random
   }
@@ -97,7 +116,7 @@ void responder(){
   }
   }
 void correcta(){
-  for(int i = 0; i < ciclos; i++ ){    //Patron de Neopixeles 
+  for(int i = 0; i < ciclos; i++ ){    //Patron de Neopixeles cuando se contesta bien
     pixels.setPixelColor(num_pregunta, pixels.Color(0, 255, 0));
   pixels.show();
   delay(100);
