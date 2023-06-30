@@ -24,6 +24,7 @@
 #define pinTemp 6
 
 //Variables
+int Estado;
 String request;
 
 //Funciones
@@ -31,7 +32,7 @@ void Temperature_medition(void);
 
 //Constructores
 SoftwareSerial BT_HC06(pinTXD_BT,pinRXD_BT);  //Define los pines del modulo HC-06
-OneWire ourWire(pinTemp);  //Pin 5 para el sensor de temperatura
+OneWire ourWire(pinTemp);  //Pin 6 para el sensor de temperatura
 DallasTemperature sensor(&ourWire);
 Ticker ISR_GET_TEMP(Temperature_medition, 10000);
 
@@ -40,23 +41,20 @@ void setup() {
   Serial.begin(9600);
   pinMode(pinLed, OUTPUT),
   sensor.begin(); 
-  ISR_GET_TEMP.start();
+    ISR_GET_TEMP.start();
 }
-
 void loop() {
   if(BT_HC06.available()>0){
-int est_led = BT_HC06.parseInt();
-    Serial.println(est_led);
-    if(est_led == 1){
+    Estado = BT_HC06.parseInt(); 
+    if(Estado == 1){
       digitalWrite(pinLed, HIGH);
       }
-    if(est_led == 2){
+    if(Estado == 2){
       digitalWrite(pinLed, LOW);
       }
-  }
-    ISR_GET_TEMP.update();
+    }    
+     ISR_GET_TEMP.update();
 }
-
 void Temperature_medition(){
   sensor.requestTemperatures();   //Se envía el comando para leer la temperatura
   int temp = sensor.getTempCByIndex(0); //Se obtiene la temperatura en ºC
