@@ -20,7 +20,7 @@ Adafruit_NeoPixel pixels(NUMPIXELS, pinNeo, NEO_GRB + NEO_KHZ800);
 
 //Funciones
 int ruleta();  //Elije un numero de pregunta al azar (Nideah como se hace juas juas)
-void respoder();   //Muestra la pregunta en el BT espera respuesta y determina si es correcta o incorrecta
+void responder();   //Muestra la pregunta en el BT espera respuesta y determina si es correcta o incorrecta
 void correcta();  //La respuesta dada es correcta
 void incorrecta(); //La respuesta es incorrecta
 
@@ -30,21 +30,28 @@ void setup() {
 }
 
 void loop() {
-  num_pregunta = ruleta();
-  responder();
+  Serial.println("¿Estas Listo?");
+  if(Serial.available()>0){
+      String empezar = Serial.readStringUntil('\n');
+      if(empezar == String("Si")){
+        num_pregunta = ruleta();
+        responder();
+      }
+  
+}
 }
 
 int ruleta(){
     int num_random;
 //  num_random = random(1,preguntas); //Activar cuando ya esten las preguntas ajsjasjaj
-    num_random = 1; //Desactivar cuando no hayan preguntas juas juas
+    num_random = random(1, 4); //Activar cuando no hayan preguntas juas juas
     return num_random; //Regresa el numero random
   }
 
 void responder(){
   switch(num_pregunta){
     case 1:
-    Serial.print("Y si sirve");
+    Serial.println("Y si sirve");
     if(Serial.available()>0){
       String respondiendo = Serial.readStringUntil('\n');
       if(respondiendo == String("Si")){
@@ -55,7 +62,7 @@ void responder(){
       }
       }
     case 2:
-    Serial.print("Apoco tan bueno");
+    Serial.println("Apoco tan bueno");
     if(Serial.available()>0){
       String respondiendo = Serial.readStringUntil('\n');
       if(respondiendo == String("Mextraña araña")){
@@ -66,7 +73,7 @@ void responder(){
       }
       }
     case 3:
-    Serial.print("Que pro que sos estrada");
+    Serial.println("Que pro que sos estrada");
     if(Serial.available()>0){
       String respondiendo = Serial.readStringUntil('\n');
       if(respondiendo == String("Tengo hambre")){
@@ -76,6 +83,17 @@ void responder(){
         incorrecta();
       }
       }
+    case 4:
+    Serial.println("Y si spider-man 2099 es Mephisto?");
+    if(Serial.available()>0){
+      String respondiendo = Serial.readStringUntil('\n');
+      if(respondiendo == String("Se hizo canon")){
+        correcta();
+      }
+      if(respondiendo == String("Eso no es parte del canon")){
+        incorrecta();
+      }
+      }  
   }
   }
 void correcta(){
@@ -91,8 +109,9 @@ void correcta(){
   pixels.show();
   delay(100);
   }
+  
 void incorrecta(){
-  tone(buzz, 440, 50);  //Aca iria la melodia si alguien la hubiera subido juas juas
+  tone(buzz, 440, 50);  //Aca iria la melodia si alguien la hubiera subido juas juas ( No Hate )
   delay(100);
   noTone(buzz);
   delay(1000);
