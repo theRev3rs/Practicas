@@ -22,8 +22,23 @@
 #define tpr 15 //Segundos Para Responder
 
 //Variables
-int num_pregunta;  //Numero de pregunta
+byte num_pregunta;  //Numero de pregunta
 String respondiendo;
+bool listo = false;  //Espera a que el Modulo BT este en linea e imprima la frase "Listo"
+
+  //Para la Melodia
+  #define Do 262
+  #define Dosos 277
+  #define Re 294
+  #define Resos 311
+  #define Mi 330
+  #define Fa 349
+  #define Fasos 370
+  #define Sol 392
+  #define Solsos 415
+  #define La 440
+  #define Lasos 466
+  #define Si 494
 
 //Funciones
 int ruleta();  //Elije un numero de pregunta al azar (Nideah como se hace juas juas)
@@ -31,29 +46,50 @@ void responder();   //Muestra la pregunta en el BT espera respuesta y determina 
 void correcta();  //La respuesta dada es correcta
 void incorrecta(); //La respuesta es incorrecta
 void contador_tpr();
+
 //Constructores
 Adafruit_NeoPixel pixels(NUMPIXELS, pinNeo, NEO_GRB + NEO_KHZ800); 
 
 void setup() {
   pixels.begin();
   Serial.begin(9600);
-  Serial.println("Primera pregunta");
+  Serial.println("Instrucciones: ");
+  Serial.println("Comencemos... ¿Estas listo?");
 }
 
 void loop() {
-  num_pregunta = ruleta();
+  if(Serial.available()>0){
+    String empezar = Serial.readStringUntil('\n');
+  if ( empezar == String("Listo")){
+  Serial.println("Primera pregunta");
+  listo = true;
+  pixels.clear();
+    pixels.show();
+    delay(100);
+  }
+  }
+  
+  if (listo == true){
+  num_pregunta = random(0, 21);
   responder();
-  delay(5000);
+  delay(1000);
    Serial.println();
   Serial.println("Siguiente pregunta");
-}
-int ruleta(){
-  int num_random;
-    return num_random = random(0, 21); //Selecciona un numero de pregunta al azar
   }
-
+  if(listo == false){
+    if (listo == false){
+  Serial.println("Escribe Listo para inicar");
+  while(!Serial.available()){
+    for(int NEO = 0; NEO < NUMPIXELS; NEO++){
+    pixels.setPixelColor(NEO, pixels.Color(random(0,255), random(0,255) , random(0,255)));
+    pixels.show();
+    delay(10);
+    }
+  }
+  }
+}
+}
 void responder(){
-  //https://aprende.guatemala.com/historia/geografia/departamentos-de-guatemala-cabeceras/
     if(num_pregunta == 0){
     Serial.println("Cabecera departamental de Petén");
     contador_tpr();
@@ -87,7 +123,7 @@ void responder(){
       if(num_pregunta == 3){
     Serial.println("Cabecera departamental de Quiché");
     contador_tpr();
-      if(respondiendo == String("Santa Cruz del Quiché")){   //Respuesta correcta
+      if(respondiendo == String("Santa Cruz del Quiche")){   //Respuesta correcta
         correcta();
       }
       else{
@@ -197,7 +233,6 @@ void responder(){
       if(num_pregunta == 14 ){
     Serial.println("Cabecera departamental de Jalapa");
     contador_tpr();
-      Serial.println(respondiendo);
       if(respondiendo == String("Jalapa")){
         correcta();
       }
@@ -275,15 +310,27 @@ void responder(){
         incorrecta();
       }
       }
+      if(respondiendo == String("Pausa")){
+       listo = false;
+       Serial.print("Juego en pausa");
+    }
   }
 
 void contador_tpr(){
   bool tiempo_agotado = false;
   int i = tpr;
   while((!Serial.available()>0) && tiempo_agotado == false){
+    int R = random(0,255);
+  int G = random(0,255);
+  int B = random(0,255);
     Serial.print(i);
     Serial.print("...");
-    delay(1000);
+    pixels.setPixelColor(num_pregunta, pixels.Color(255, 120 , 0));
+    pixels.show();
+    delay(900);
+    pixels.clear();
+    pixels.show();
+    delay(100);
     i--;
     if(i < 0){
       tiempo_agotado = true;
@@ -297,34 +344,56 @@ void contador_tpr(){
     if(tiempo_agotado == false){
       Serial.println("Respuesta recibida: " + respondiendo);
       }
+      pixels.setPixelColor(num_pregunta, pixels.Color(0, 0 , 0));
+    pixels.show();
+    if(respondiendo == String("No se")){
+        Serial.println("Animo!");
+    }
+    
   }
   
 void correcta(){
   Serial.println("Respuesta Correcta");
+  tone(buzz, Mi*5 ,500);  
+  delay(100);
+  tone(buzz, Sol*5 ,500);  
+  delay(100);
+  tone(buzz, Fa*8);
+  delay(100);
+  noTone(buzz);
   for(int i = 0; i < ciclos; i++ ){    //Patron de Neopixeles cuando se contesta bien
-    int G = random(0,255);
-    pixels.setPixelColor(num_pregunta, pixels.Color(0, G, 0));
+    pixels.setPixelColor(num_pregunta, pixels.Color(0, 255, 0));
     pixels.show();
-    delay(100);
-    }
     delay(100);
     pixels.setPixelColor(num_pregunta, pixels.Color(0, 0, 0));
     pixels.show();
-  }
+    delay(100);
+    }
+}
   
 void incorrecta(){
   Serial.println("Respuesta Incorrecta");
-  tone(buzz, 440);  //Aca iria la melodia si alguien la hubiera subido juas juas ( No Hate )
+  tone(buzz, Re*2 ,500);  //Aca iria la melodia si alguien la hubiera subido juas juas ( No Hate )
   delay(100);
-  noTone(buzz);
+  tone(buzz, Sol*2 ,500); 
+  delay(200);
+  tone(buzz, Sol*2 ,500);  
+  delay(200);
+  tone(buzz, Do*2 ,500); 
+  delay(200);
+  tone(buzz, Lasos*2 ,500); 
+  delay(500);
+  tone(buzz, Do*2,500);
+  delay(100);
+  tone(buzz, Si*2,500);  
+  delay(100);
   delay(1000);
    for(int i = 0; i < ciclos; i++ ){    //Patron de Neopixeles cuando se contesta bien
-    int R = random(0,255);
-    pixels.setPixelColor(num_pregunta, pixels.Color(R, 0, 0));
+    pixels.setPixelColor(num_pregunta, pixels.Color(255, 0, 0));
     pixels.show();
-    delay(100);
-    }
     delay(100);
     pixels.setPixelColor(num_pregunta, pixels.Color(0, 0, 0));
     pixels.show();
+    delay(100);
+    }
   }
