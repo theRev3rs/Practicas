@@ -53,7 +53,6 @@ Adafruit_NeoPixel pixels(NUMPIXELS, pinNeo, NEO_GRB + NEO_KHZ800);
 void setup() {
   pixels.begin();
   Serial.begin(9600);
-  Serial.println("Instrucciones: ");
   Serial.println("Comencemos... ¿Estas listo?");
 }
 
@@ -78,7 +77,7 @@ void loop() {
   }
   if(listo == false){
     if (listo == false){
-  Serial.println("Escribe Listo para inicar");
+  Serial.println("Escribe Listo para iniciar");
   while(!Serial.available()){
     for(int NEO = 0; NEO < NUMPIXELS; NEO++){
     pixels.setPixelColor(NEO, pixels.Color(random(0,255), random(0,255) , random(0,255)));
@@ -90,17 +89,7 @@ void loop() {
 }
 }
 void responder(){
-    if(num_pregunta == 0){
-    Serial.println("Cabecera departamental de Petén");
-    contador_tpr();
-      if(respondiendo == String("Flores")){    //Respuesta correcta
-        correcta();
-      }
-      else{
-        incorrecta();
-      }
-      }
-      if(num_pregunta == 1){
+      if(num_pregunta == 0){
     Serial.println("Cabecera departamental de Izabal");
     contador_tpr();
       if(respondiendo == String("Puerto Barrios")){    //Respuesta correcta
@@ -110,87 +99,7 @@ void responder(){
         incorrecta();
       }
       }
-      if(num_pregunta == 2){
-    Serial.println("Cabecera departamental de Alta Verapaz");
-    contador_tpr();
-      if(respondiendo == String("Coban")){    //Respuesta correcta
-        correcta();
-      }
-      else{
-        incorrecta();
-      }
-      }
-      if(num_pregunta == 3){
-    Serial.println("Cabecera departamental de Quiché");
-    contador_tpr();
-      if(respondiendo == String("Santa Cruz del Quiche")){   //Respuesta correcta
-        correcta();
-      }
-      else{
-        incorrecta();
-      }
-      }
-      if(num_pregunta == 4){
-    Serial.println("Cabecera departamental de Huehuetenango");
-    contador_tpr();
-      if(respondiendo == String("Huehuetenango")){  //Resuesta Correcta
-        correcta();
-      }
-      else{
-        incorrecta();
-      }
-      }
-       if(num_pregunta == 5){
-    Serial.println("Cabecera departamental de Escuintla");
-    contador_tpr();
-      if(respondiendo == String("Escuintla")){
-        correcta();
-      }
-      else{
-        incorrecta();
-      }
-      }
-        if(num_pregunta == 6 ){
-    Serial.println("Cabecera departamental de San Marcos");
-    contador_tpr();
-      if(respondiendo == String("San Marcos")){
-        correcta();
-      }
-      else{
-        incorrecta();
-      }
-      }
-      if(num_pregunta == 7 ){
-    Serial.println("Cabecera departamental de Jutiapa");
-    contador_tpr();
-      if(respondiendo == String("Jutiapa")){
-        correcta();
-      }
-      else{
-        incorrecta();
-      }
-      }
-      if(num_pregunta == 8 ){
-    Serial.println("Cabecera departamental de Baja Verapaz");
-    contador_tpr();
-      if(respondiendo == String("Salama")){
-        correcta();
-      }
-      else{
-        incorrecta();
-      }
-      }
-       if(num_pregunta == 9 ){
-    Serial.println("Cabecera departamental de Santa Rosa");
-    contador_tpr();
-      if(respondiendo == String("Cuilapa")){
-        correcta();
-      }
-      else{
-        incorrecta();
-      }
-      }
-      if(num_pregunta == 10 ){
+      if(num_pregunta == 1 ){
     Serial.println("Cabecera departamental de Zacapa");
     contador_tpr();
       if(respondiendo == String("Zacapa")){
@@ -200,7 +109,47 @@ void responder(){
         incorrecta();
       }
       }
-      if(num_pregunta == 11 ){
+      if(num_pregunta == 2 ){
+    Serial.println("Cabecera departamental de Chiquimula");
+    contador_tpr();
+      if(respondiendo == String("Chiquimula")){
+        correcta();
+      }
+      else{
+        incorrecta();
+      }
+      }
+      if(num_pregunta == 3 ){
+    Serial.println("Cabecera departamental de Jutiapa");
+    contador_tpr();
+      if(respondiendo == String("Jutiapa")){
+        correcta();
+      }
+      else{
+        incorrecta();
+      }
+      }
+      if(num_pregunta == 4 ){
+    Serial.println("Cabecera departamental de Santa Rosa");
+    contador_tpr();
+      if(respondiendo == String("Cuilapa")){
+        correcta();
+      }
+      else{
+        incorrecta();
+      }
+      }
+      if(num_pregunta == 5){
+    Serial.println("Cabecera departamental de Escuintla");
+    contador_tpr();
+      if(respondiendo == String("Escuintla")){
+        correcta();
+      }
+      else{
+        incorrecta();
+      }
+      }
+      if(num_pregunta == 6 ){
     Serial.println("Cabecera departamental de Suchitepéquez");
     contador_tpr();
       if(respondiendo == String("Mazatenango")){
@@ -210,10 +159,60 @@ void responder(){
         incorrecta();
       }
       }
-      if(num_pregunta == 12 ){
-    Serial.println("Cabecera departamental de Chiquimula");
+      if(num_pregunta == 7 ){
+    Serial.println("Cabecera departamental de Retalhuleu");
     contador_tpr();
-      if(respondiendo == String("Chiquimula")){
+      if(respondiendo == String("Retalhuleu")){
+        correcta();
+      }
+      else{
+        incorrecta();
+      }
+      }
+      if(num_pregunta == 8 ){
+    Serial.println("Cabecera departamental de San Marcos");
+    contador_tpr();
+      if(respondiendo == String("San Marcos")){
+        correcta();
+      }
+      else{
+        incorrecta();
+      }
+      }
+      if(num_pregunta == 9 ){
+    Serial.println("Cabecera departamental de Quetzaltenango");
+    contador_tpr();
+      if(respondiendo == String("Quetzaltenango")){
+        correcta();
+      }
+      else{
+        incorrecta();
+      }
+      }
+      if(num_pregunta == 10 ){
+    Serial.println("Cabecera departamental de Sololá");
+    contador_tpr();
+      if(respondiendo == String("Solola")){
+        correcta();
+      }
+      else{
+        incorrecta();
+      }
+      }
+      if(num_pregunta == 11 ){
+    Serial.println("Cabecera departamental de Chimaltenango");
+    contador_tpr();
+      if(respondiendo == String("Chimaltenango")){
+        correcta();
+      }
+      else{
+        incorrecta();
+      }
+      }
+      if(num_pregunta == 12 ){
+    Serial.println("Cabecera departamental de Sacatepéquez");
+    contador_tpr();
+      if(respondiendo == String("La antigua guatemala")){
         correcta();
       }
       else{
@@ -241,26 +240,6 @@ void responder(){
       }
       }
       if(num_pregunta == 15 ){
-    Serial.println("Cabecera departamental de Chimaltenango");
-    contador_tpr();
-      if(respondiendo == String("Chimaltenango")){
-        correcta();
-      }
-      else{
-        incorrecta();
-      }
-      }
-      if(num_pregunta == 16 ){
-    Serial.println("Cabecera departamental de Quetzaltenango");
-    contador_tpr();
-      if(respondiendo == String("Quetzaltenango")){
-        correcta();
-      }
-      else{
-        incorrecta();
-      }
-      }
-      if(num_pregunta == 17 ){
     Serial.println("Cabecera departamental de El progreso");
     contador_tpr();
       if(respondiendo == String("Guastatoya")){
@@ -270,27 +249,17 @@ void responder(){
         incorrecta();
       }
       }
-      if(num_pregunta == 18 ){
-    Serial.println("Cabecera departamental de Retalhuleu");
+      if(num_pregunta == 16 ){
+    Serial.println("Cabecera departamental de Baja Verapaz");
     contador_tpr();
-      if(respondiendo == String("Retalhuleu")){
+      if(respondiendo == String("Salama")){
         correcta();
       }
       else{
         incorrecta();
       }
       }
-      if(num_pregunta == 19 ){
-    Serial.println("Cabecera departamental de Sololá");
-    contador_tpr();
-      if(respondiendo == String("Solola")){
-        correcta();
-      }
-      else{
-        incorrecta();
-      }
-      }
-      if(num_pregunta == 20 ){
+      if(num_pregunta == 17 ){
     Serial.println("Cabecera departamental de Totonicapán");
     contador_tpr();
       if(respondiendo == String("Totonicapan")){
@@ -300,10 +269,30 @@ void responder(){
         incorrecta();
       }
       }
-      if(num_pregunta == 21 ){
-    Serial.println("Cabecera departamental de Sacatepéquez");
+      if(num_pregunta == 18){
+    Serial.println("Cabecera departamental de Huehuetenango");
     contador_tpr();
-      if(respondiendo == String("La antigua guatemala")){
+      if(respondiendo == String("Huehuetenango")){  //Resuesta Correcta
+        correcta();
+      }
+      else{
+        incorrecta();
+      }
+      }
+      if(num_pregunta == 19){
+    Serial.println("Cabecera departamental de Quiché");
+    contador_tpr();
+      if(respondiendo == String("Santa Cruz del Quiche")){   //Respuesta correcta
+        correcta();
+      }
+      else{
+        incorrecta();
+      }
+      }
+      if(num_pregunta == 20){
+    Serial.println("Cabecera departamental de Alta Verapaz");
+    contador_tpr();
+      if(respondiendo == String("Coban")){    //Respuesta correcta
         correcta();
       }
       else{
@@ -314,6 +303,16 @@ void responder(){
        listo = false;
        Serial.print("Juego en pausa");
     }
+    if(num_pregunta == 21){
+    Serial.println("Cabecera departamental de Petén");
+    contador_tpr();
+      if(respondiendo == String("Flores")){    //Respuesta correcta
+        correcta();
+      }
+      else{
+        incorrecta();
+      }
+      }
   }
 
 void contador_tpr(){
