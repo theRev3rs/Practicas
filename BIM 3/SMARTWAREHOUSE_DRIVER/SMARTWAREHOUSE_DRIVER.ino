@@ -39,10 +39,10 @@ bool pedido = false;
 
 //Constructores
 Servo piston;      // Constructor del Servo
-SoftwareSerial BTESTRADA(BTRXD, BTTXD);
+SoftwareSerial BT(BTRXD, BTTXD);
 void setup() {
-//  Seral.begin(9600);
   Serial.begin(9600);
+  BT.begin(9600);
   piston.attach(pinServo);  //Define el pin del servo
   piston.write(0);       //Coloca el servo en posicion de reposo
   pinMode(pinStepdir, OUTPUT);
@@ -50,18 +50,18 @@ void setup() {
 }
 
 void loop() {
-  if((Serial.available()>0) && (btconectado == false)){
-    String inicio = Serial.readStringUntil('\n'); 
+  if((BT.available()>0) && (btconectado == false)){
+    String inicio = BT.readStringUntil('\n'); 
   if(inicio== String("Conectado")){
     Serial.println("BT Conectado");
     btconectado = true;
     }
     }
-    while((Serial.available()>0) && (btconectado == true)){
-    entrada_BT = Serial.readStringUntil('\n'); 
+    while((BT.available()>0) && (btconectado == true)){
+    entrada_BT = BT.readStringUntil('\n'); 
     Serial.println(entrada_BT);
     delay(300);
-    cantidad = Serial.parseInt();
+    cantidad = BT.parseInt();
     
     if(entrada_BT == String("Refrescar")){
       stock1 = 10;
@@ -87,6 +87,7 @@ void loop() {
         delay(10);
         digitalWrite(pinStep, LOW);
         delay(10);
+        delay(100);
         }
 //    act_line.step(pos1); //Moverse a la posicion del entrada_BT 1
     delay(100);
@@ -97,7 +98,7 @@ void loop() {
     delay(10);
     }
     for(int a = push; a > 0; a--){
-    piston.write(a); //Empuja
+    piston.write(a); //Regresa
     delay(10);
     }
     Serial.println("Producto 1 despachado");
@@ -119,11 +120,20 @@ void loop() {
     }
     }
 
-    if(entrada_BT == String("Producto2")){
-      
-    if(cantidad <= stock2){
+    if(entrada_BT == String("Producto1")){
+    if(cantidad <= stock1){
+      pedido = true;
+//      Funcion de la banda
       Serial.println("Despachando");
-//    act_line.step(pos2); //Moverse a la posicion del entrada_BT 1
+      digitalWrite(pinStepdir, HIGH);
+      for(int i = 0 ; i < pos1; i++){
+        digitalWrite(pinStep, HIGH);
+        delay(10);
+        digitalWrite(pinStep, LOW);
+        delay(10);
+        delay(100);
+        }
+//    act_line.step(pos1); //Moverse a la posicion del entrada_BT 1
     delay(100);
     for(int i = 0; i < cantidad; i++){  //Realiza el empuje segun cuantos entrada_BTs se necesiten
     
@@ -132,15 +142,25 @@ void loop() {
     delay(10);
     }
     for(int a = push; a > 0; a--){
-    piston.write(a); //Empuja
+    piston.write(a); //Regresa
     delay(10);
     }
-    Serial.println("Producto 2 despachado");
+    Serial.println("Producto 1 despachado");
     delay(500);   //Tiempo para que otro producto este en posicion para empujarlo de ser necesario
     
     }
-//    act_line.step(-pos2); //Se mueve de regreso al origen
+//    act_line.step(-pos1); //Se mueve de regreso al origen
+ digitalWrite(pinStepdir, LOW);
+      for(int i = 0 ; i < pos1; i++){
+        digitalWrite(pinStep, HIGH);
+        delay(10);
+        digitalWrite(pinStep, LOW);
+        delay(10);
+        }
     stock1= stock1 - cantidad;
+    delay(1000); //depende cuanto tarda cada paquete en llegar al final
+    pedido = false;
+//    Funcion para apagar la banda
     }
     }
   }
