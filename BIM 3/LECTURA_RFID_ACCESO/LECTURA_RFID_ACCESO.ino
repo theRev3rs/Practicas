@@ -12,8 +12,8 @@
 #define RST_PIN  9    //Pin 9 para el reset del RC522
 #define SS_PIN  10   //Pin 10 para el SS (SDA) del RC522
 #define pinvoltaje A0   //Pin Sensor de voltaje
-#define corriente A1 //Pin sensor de corriente
-#define configRTC 6
+#define corriente A7 //Pin sensor de corriente
+#define configRTC 6  //Pin para activar la configuracion del RTC
 
 //Variables
 float Sensibilidad = 0.185;
@@ -36,7 +36,7 @@ byte Usuario2[4]= {0x22, 0xB9, 0xC9, 0x34} ; //código del usuario 2
 //Constructores
 MFRC522 mfrc522(SS_PIN, RST_PIN); ///Creamos el objeto para el RC522
 DS3231 Clock;
-LiquidCrystal_I2C PANTALLA_ESTRADA(direccion_lcd, columnas, filas);
+LiquidCrystal_I2C PANTALLA_MEDIDOR(direccion_lcd, columnas, filas);
 
 void setup() {
   Wire.begin();
@@ -47,17 +47,17 @@ void setup() {
   pinMode(pinvoltaje, INPUT);
   pinMode(corriente, INPUT);
   pinMode(configRTC, INPUT);
-  PANTALLA_ESTRADA.init();
-  PANTALLA_ESTRADA.backlight();
+  PANTALLA_MEDIDOR.init();
+  PANTALLA_MEDIDOR.backlight();
 
   if(digitalRead(configRTC) == HIGH){
     setDate();
     }
 
-    PANTALLA_ESTRADA.setCursor(0,0);
-    PANTALLA_ESTRADA.print(" EEGSA - KINAL  ");
-    PANTALLA_ESTRADA.setCursor(0,1);
-    PANTALLA_ESTRADA.print("                ");
+    PANTALLA_MEDIDOR.setCursor(0,0);
+    PANTALLA_MEDIDOR.print(" EEGSA - KINAL  ");
+    PANTALLA_MEDIDOR.setCursor(0,1);
+    PANTALLA_MEDIDOR.print("                ");
 }
 
 
@@ -104,8 +104,8 @@ void loop() {
                     }
                   else{
                     Serial.println("Acceso denegado...");
-                    PANTALLA_ESTRADA.setCursor(0,1);
-                    PANTALLA_ESTRADA.print("USUARIO INVALIDO");
+                    PANTALLA_MEDIDOR.setCursor(0,1);
+                    PANTALLA_MEDIDOR.print("USUARIO INVALIDO");
                     Serial.print("Fecha de intento de acceso: ");
                       Serial.print(Clock.getDate(), DEC);
                       Serial.print("/");
@@ -125,10 +125,10 @@ void loop() {
             
   }
   else{
-              PANTALLA_ESTRADA.setCursor(0,0);
-              PANTALLA_ESTRADA.print(" EEGSA - KINAL  ");
-              PANTALLA_ESTRADA.setCursor(0,1);
-              PANTALLA_ESTRADA.print("MEDIDOR ENERGIA ");
+              PANTALLA_MEDIDOR.setCursor(0,0);
+              PANTALLA_MEDIDOR.print(" EEGSA - KINAL  ");
+              PANTALLA_MEDIDOR.setCursor(0,1);
+              PANTALLA_MEDIDOR.print("MEDIDOR ENERGIA ");
               
               }
 }
@@ -145,28 +145,40 @@ void loop() {
 
 void calculos(){
 //  Voltaje
-  PANTALLA_ESTRADA.setCursor(0,1);
-  PANTALLA_ESTRADA.print("                ");
-  PANTALLA_ESTRADA.setCursor(2,1);
-  PANTALLA_ESTRADA.print("V: ");
-  float voltaje =  (float)15*analogRead(pinvoltaje)/1023;
-  PANTALLA_ESTRADA.print(voltaje);
-  PANTALLA_ESTRADA.print(" V   ");
+  PANTALLA_MEDIDOR.setCursor(0,1);
+  PANTALLA_MEDIDOR.print("                ");
+  PANTALLA_MEDIDOR.setCursor(2,1);
+  PANTALLA_MEDIDOR.print("V: ");
+  float voltaje =  (float)25*analogRead(pinvoltaje)/1023;
+  PANTALLA_MEDIDOR.print(voltaje);
+  PANTALLA_MEDIDOR.print(" V   ");
   delay(5000); 
 //  Corriente
-PANTALLA_ESTRADA.setCursor(2,1);
-  PANTALLA_ESTRADA.print("I: ");
-  Serial.print(analogRead(corriente));
-  float I = abs((2.5 - ((analogRead(corriente)*5)/1023))/0.185);
-  PANTALLA_ESTRADA.print(I,3);
-  PANTALLA_ESTRADA.print(" A   ");
+  PANTALLA_MEDIDOR.setCursor(2,1);
+  PANTALLA_MEDIDOR.print("I: ");
+  float med = analogRead(corriente)*(5.0/1023.0);
+  float I = abs((2.5 - med)/Sensibilidad);
+  if(abs(I) >= 1 ){
+  PANTALLA_MEDIDOR.print(I,3);
+  PANTALLA_MEDIDOR.print(" A   ");
+  }
+  if(abs(I) < 1 ){
+  PANTALLA_MEDIDOR.print(I*1000,0);
+  PANTALLA_MEDIDOR.print(" mA   ");
+  }
   delay(5000);
 //  Potencia
-  PANTALLA_ESTRADA.setCursor(2,1);
+  PANTALLA_MEDIDOR.setCursor(2,1);
   float P = voltaje * I;
-  PANTALLA_ESTRADA.print("P: ");
-  PANTALLA_ESTRADA.print(P,3); 
-  PANTALLA_ESTRADA.print("W   ");
+  PANTALLA_MEDIDOR.print("P: ");
+  if(abs(P) >= 1 ){
+  PANTALLA_MEDIDOR.print(I,3);
+  PANTALLA_MEDIDOR.print(" W   ");
+  }
+  if(abs(P) < 1 ){
+  PANTALLA_MEDIDOR.print(P*1000,0);
+  PANTALLA_MEDIDOR.print(" mW   ");
+  }
   delay(5000);
 
   }
