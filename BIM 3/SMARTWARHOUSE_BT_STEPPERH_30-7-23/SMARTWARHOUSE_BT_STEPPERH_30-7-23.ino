@@ -15,20 +15,20 @@
 #include <Stepper.h>
 
 //Directivas
-#define pinServoPush 5     //Pin del piston
-#define pinServoPull 4     //Pin del piston 
+#define pinServoPush 15     //Pin del piston
+#define pinServoPull 14     //Pin del piston 
 
 #define BTRXD 6   //Pines del Módulo BT
 #define BTTXD 7   //Pines del Módulo BT
 
-#define RELE_BANDA 14 //Pines del puente H
+#define RELE_BANDA 12 //Pines del puente H
 
-#define pinStep1 13 //Pines del Stepper
-#define pinStep2 12 //Pines del Stepper
-#define pinStep3 11 //Pines del Stepper
-#define pinStep4 10 //Pines del Stepper
+#define pinStep1 5 //Pines del Stepper
+#define pinStep2 4 //Pines del Stepper
+#define pinStep3 3 //Pines del Stepper
+#define pinStep4 2 //Pines del Stepper
 
-#define pos1 20     //Pasos para la Torre 1
+#define pos1 35     //Pasos para la Torre 1
 #define pos2 650    //Pasos para la Torre 2
 #define pos3 1300   //Pasos para la Torre 3
 #define pos4 1920   //Pasos para la Torre 4
@@ -188,11 +188,11 @@ void detener_banda(){
     }
 void piston(){
       digitalWrite(pinServoPush, LOW);   //Empuja
-      delay(500);
+      delay(650);
       digitalWrite(pinServoPush, HIGH);  //Se detiene
-      delay(600);
+      delay(250);
       digitalWrite(pinServoPull, LOW);   //regresa
-      delay(550);
+      delay(650);
       digitalWrite(pinServoPull, HIGH);  //Se detiene
       Serial.println("Producto Despachado");
       delay(1000);  //Tiempo para que otro producto este listo para ser entregado
