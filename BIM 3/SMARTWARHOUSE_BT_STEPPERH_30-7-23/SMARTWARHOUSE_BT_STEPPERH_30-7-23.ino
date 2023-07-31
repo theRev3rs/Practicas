@@ -8,21 +8,26 @@
  * Nombres: RICARDO ESTRADA , WOLF SALGUERO, CARLOS QUIM, CRISTIAN ORELLANA
  * GRUPO: 1
  * Proyecto: SmartWarehouse
-*/
+ */
 
 //Librerias
 #include <SoftwareSerial.h>
 #include <Stepper.h>
+
 //Directivas
-#define pinServoPush 5     //Pin del Servo
-#define pinServoPull 4
+#define pinServoPush 5     //Pin del piston
+#define pinServoPull 4     //Pin del piston 
+
 #define BTRXD 6   //Pines del Módulo BT
 #define BTTXD 7   //Pines del Módulo BT
+
 #define RELE_BANDA 14 //Pines del puente H
+
 #define pinStep1 13 //Pines del Stepper
 #define pinStep2 12 //Pines del Stepper
 #define pinStep3 11 //Pines del Stepper
 #define pinStep4 10 //Pines del Stepper
+
 #define pos1 20     //Pasos para la Torre 1
 #define pos2 650    //Pasos para la Torre 2
 #define pos3 1300   //Pasos para la Torre 3
@@ -32,39 +37,42 @@
 //Variables
 String entrada_bluetooth;  //String que almacena el texto recibido por bluetooth
 int cantidad;           //Variable para la cantidad de producto
-int posproducto;
-byte stock1 = 6;       //Cantidad de producto inicial
-byte stock2 = 6;       //Cantidad de producto inicial
-byte stock3 = 6;       //Cantidad de producto inicial
-byte stock4 = 6;       //Cantidad de producto inicial
-byte stock5 = 6;       //Cantidad de producto inicial
-bool btconectado = false;  //Variable booleana que determina si esta conectado el bluetooth o no
-int tiempoentrega;
-int tiempo1 = 3800;
-int tiempo2 = 2800;
-int tiempo3 = 1800;
-int tiempo4 = 800;
-int tiempo5 = 100;
+int posproducto;       //Variable con valor cambiante para la posicion de los pedidos
 
+byte stock1 = 6;       //Cantidad de producto inicial 1
+byte stock2 = 6;       //Cantidad de producto inicial 2
+byte stock3 = 6;       //Cantidad de producto inicial 3
+byte stock4 = 6;       //Cantidad de producto inicial 4
+byte stock5 = 6;       //Cantidad de producto inicial 5
+
+bool btconectado = false;  //Variable booleana que determina si esta conectado el bluetooth o no
+
+int tiempoentrega;  //Variable cambiante del tiempo para que el producto llegue al final de la banda
+
+int tiempo1 = 3800; //Tiempo del producto 1
+int tiempo2 = 2800; //Tiempo del producto 2
+int tiempo3 = 1800; //Tiempo del producto 3
+int tiempo4 = 800;  //Tiempo del producto 4
+int tiempo5 = 100;  //Tiempo del producto 5
 
 //Constructores
 SoftwareSerial BT(BTRXD, BTTXD);  //Constructor Módulo Bluetooth
-Stepper Act_lineal(2048, pinStep1, pinStep2, pinStep3 , pinStep4);
+Stepper Act_lineal(2048, pinStep1, pinStep2, pinStep3 , pinStep4);  //Constructor del stepper
 
 void setup() {
   Serial.begin(9600);   //Inicia la comunicacion Serial
   BT.begin(9600);    //Inicia la comunicacion Bluetooth
   Act_lineal.setSpeed(10);  //Velocidad del actuador lineal
-  pinMode(RELE_BANDA, OUTPUT);           //Define el pin de entrada 1 del Puente H como salida
-  pinMode(pinServoPush, OUTPUT); 
-  pinMode(pinServoPull, OUTPUT);
-  digitalWrite(pinServoPush, HIGH);
-  digitalWrite(pinServoPull, HIGH); 
-  digitalWrite(pinStep1, OUTPUT);   //Se deja fijo el pin necesario para que se mueve en una dirección
-  digitalWrite(pinStep2, OUTPUT);   //Se deja fijo el pin necesario para que se mueve en una dirección
-  digitalWrite(pinStep3, OUTPUT);   //Se deja fijo el pin necesario para que se mueve en una dirección
-  digitalWrite(pinStep4, OUTPUT);   //Se deja fijo el pin necesario para que se mueve en una dirección
-  Serial.println("Encendido");
+  pinMode(RELE_BANDA, OUTPUT);      //Define el pin de entrada 1 del Puente H como salida
+  pinMode(pinServoPush, OUTPUT);    //Define el pin para empujar del piston
+  pinMode(pinServoPull, OUTPUT);    //Define el pin para empujar del piston
+  digitalWrite(pinServoPush, HIGH); //El rele usa logica negada por lo que para estar apagados se escribe en "HIGH"
+  digitalWrite(pinServoPull, HIGH); //
+  digitalWrite(pinStep1, OUTPUT);   //PIN del Stepper
+  digitalWrite(pinStep2, OUTPUT);   //PIN del Stepper
+  digitalWrite(pinStep3, OUTPUT);   //PIN del Stepper
+  digitalWrite(pinStep4, OUTPUT);   //PIN del Stepper
+  Serial.println("Sistema Encendido... Esperando Conexion Bluetooth");
 }
 
 void loop() {
@@ -72,26 +80,28 @@ void loop() {
     String inicio = BT.readStringUntil('\n'); 
   if(inicio== String("Conectado")){   //Texto que la app envia cuando se conecta al Modulo HC-06
     Serial.println("Bluetooth Conectado");
-    btconectado = true;
+    btconectado = true;  //El bluetooth esta conectado y listo
     }
     }
     while((BT.available()>0) && (btconectado == true)){    //Leemos la entrada del módulo bluetooth
-    entrada_bluetooth = BT.readStringUntil('\n'); 
+    entrada_bluetooth = BT.readStringUntil('\n'); //Lee instrucciones en texto
     Serial.println(entrada_bluetooth);
     delay(500);
-    cantidad = BT.parseInt();
+    cantidad = BT.parseInt();   //Lee los enteros por separado
     
-    if(entrada_bluetooth == String("Refrescar")){     //Si se rellenaron las estanterias
+    if(entrada_bluetooth == String("Refrescar")){     //Si se rellenaron las estanterias reestablece el stock
       stock1 = 6;
       stock2 = 6;
       stock3 = 6;
       stock4 = 6;
       stock5 = 6;
       }
-      if(entrada_bluetooth == String("Desconectado")){    //Si se desconecto la app
+      if(entrada_bluetooth == String("Desconectado")){    //Si se desconecto desde la app
       Serial.println("Bluetooth Desconectado");
       btconectado == false;
       }
+
+      //Opciones de producto para aplicar los valores necesarios para la entrega
     if(entrada_bluetooth == String("Producto1")){
       if(cantidad <= stock1){
     stock1 = stock1 - cantidad;
@@ -149,9 +159,10 @@ void loop() {
     }
     }
     }
-void actuador_lineal(){  
+    
+void actuador_lineal(){    //Funcion para la posicion y despacho del producto
       {
-      avanzar_banda();   //      Funcion de la banda
+      avanzar_banda();   //      Funcion para activar la banda
       Serial.print("Despachando: ");
       Serial.println(cantidad);
                         //      Actuador Lineal ( Posicion )
@@ -163,24 +174,26 @@ void actuador_lineal(){
         Act_lineal.step(-posproducto);
       delay(tiempoentrega); //depende cuanto tarda cada paquete en llegar al final
       detener_banda();    //    Funcion para apagar la banda
-    }
-    }      //Fin producto
+    }     //Fin producto
+    }      
+
+    
 void avanzar_banda(){
-    digitalWrite(RELE_BANDA, HIGH);
+    digitalWrite(RELE_BANDA, HIGH);  //Activa el rele de la banda
     delay(500);
     }
 void detener_banda(){
     delay(500);
-    digitalWrite(RELE_BANDA, LOW);
+    digitalWrite(RELE_BANDA, LOW);  //Desactiva el rele de la banda
     }
 void piston(){
-      digitalWrite(pinServoPush, LOW);
+      digitalWrite(pinServoPush, LOW);   //Empuja
       delay(500);
-      digitalWrite(pinServoPush, HIGH);
+      digitalWrite(pinServoPush, HIGH);  //Se detiene
       delay(600);
-      digitalWrite(pinServoPull, LOW);
-      delay(500);
-      digitalWrite(pinServoPull, HIGH);
+      digitalWrite(pinServoPull, LOW);   //regresa
+      delay(550);
+      digitalWrite(pinServoPull, HIGH);  //Se detiene
       Serial.println("Producto Despachado");
-      delay(1000);
+      delay(1000);  //Tiempo para que otro producto este listo para ser entregado
     }
