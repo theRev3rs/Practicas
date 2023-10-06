@@ -18,7 +18,7 @@
 #define pinI A3
 
 //Variables
-String Entrada;
+byte Entrada;
 float Sensibilidad = 0.185;
 float voltaje = 0;
 float med_I = 0;
@@ -37,18 +37,18 @@ void setup() {
 
 void loop() {
  if(Serial.available() > 0){
-  Entrada = Serial.readStringUntil("\n");
+  Entrada = Serial.parseInt();
  }
- if(Entrada == String("Potencia")){
+ if(Entrada == 4){
   mediciones(1);
   }
- if(Entrada == String("Voltaje")){
+ if(Entrada == 1){
   mediciones(2);
   }
- if(Entrada == String("Corriente")){
+ if(Entrada == 3){
   mediciones(3);
   }
- if(Entrada == String("Resistencia")){
+ if(Entrada == 2){
   mediciones(4);
   }
 }
@@ -60,21 +60,29 @@ void mediciones(int x){
  delay(100);
   switch(x){
   case 1:
+  while(!Serial.available()>0){
   W = voltaje * corriente;
   Serial.println(W,3);
+  }
   break;
 
   case 2:
+  while(!Serial.available()>0){
   Serial.println(voltaje);
+  }
   break;
 
   case 3:
+  while(!Serial.available()>0){
   Serial.println(corriente);
+  }
   break;
 
   case 4:
+  while(!Serial.available()>0){
   R = voltaje / corriente;
   Serial.println(R);
+  }
   break;
 }
 }
